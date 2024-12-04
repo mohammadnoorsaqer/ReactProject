@@ -87,4 +87,57 @@ class MovieController extends Controller
             ], 500);
         }
     }
+    public function getMoviesByCategory($category)
+    {
+        $apiKey = env('TMDB_API_KEY');
+        $url = "https://api.themoviedb.org/3/movie/{$category}?api_key=$apiKey&language=en-US"; 
+
+        $response = Http::withoutVerifying()->get($url); // Disable SSL verification
+
+        // Check if response is successful
+        if ($response->successful()) {
+            return response()->json([
+                'movies' => $response->json()['results'],
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'Failed to fetch data from TMDB API',
+            ], 500);
+        }
+    }
+
+    public function getMovieDetails($movieId)
+    {
+        $apiKey = env('TMDB_API_KEY');
+        
+        // Fetch movie details
+        $movieUrl = "https://api.themoviedb.org/3/movie/{$movieId}?api_key=$apiKey&language=en-US";
+        $movieResponse = Http::withoutVerifying()->get($movieUrl);
+    
+        // Fetch video (trailer) details
+        $videoUrl = "https://api.themoviedb.org/3/movie/{$movieId}/videos?api_key=$apiKey&language=en-US";
+        $videoResponse = Http::withoutVerifying()->get($videoUrl);
+    
+        if ($movieResponse->successful() && $videoResponse->successful()) {
+            $movieData = $movieResponse->json();
+            $videoData = $videoResponse->json();
+    
+            // Find YouTube trailer
+            $trailer = collect($videoData['results'])
+                ->first(function ($video) {
+                    return $video['site'] === 'YouTube' && 
+                           (stripos($video['type'], 'trailer') !== false || 
+                            stripos($video['type'], 'teaser') !== false);
+                });
+    
+            return response()->json([
+                'movie' => $movieData,
+                'trailer' => $trailer // This could be null if no trailer is found
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'Failed to fetch data from TMDB API',
+            ], 500);
+        }
+    }
 }
