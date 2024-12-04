@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MovieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware(['api'])->group(function () {
+    // Route for Movies
+    Route::get('movies', [MovieController::class, 'getMovies']);
+
+    // Route for Popular TV Shows
+    Route::get('popular-tv', [MovieController::class, 'getPopularTvShows']);
+
+    // Route for Trending TV Shows
+    Route::get('trending-tv', [MovieController::class, 'getTrendingTvShows']);
+
+    // Route for Hulu Originals
+    Route::get('hulu-originals', [MovieController::class, 'getHuluOriginals']);
+});
+
