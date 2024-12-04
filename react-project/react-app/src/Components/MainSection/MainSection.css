@@ -1,0 +1,183 @@
+/* MainSection.css */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0b0c10;
+    color: #ffffff;
+  }
+  
+  .main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Sub Header Styles */
+  .sub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to right, #1ce783, #14b268);
+    padding: 20px;
+    color: white;
+  }
+  
+  .sub-header-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .hulu-logo {
+    height: 50px;
+    margin-right: 20px;
+  }
+  
+  .header-text h4 {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  
+  .header-text h3 {
+    margin: 5px 0;
+    font-size: 20px;
+  }
+  
+  .details-link {
+    color: white;
+    text-decoration: underline;
+  }
+  
+  .header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-get-bundle {
+    background-color: white;
+    color: #1ce783;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .terms-link {
+    color: white;
+    text-decoration: underline;
+    font-size: 12px;
+  }
+  
+  /* Categories Styles */
+  .categories {
+    padding: 20px;
+  }
+  
+  .categories h4 {
+    color: #1ce783;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  
+  .categories-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .categories-description {
+    color: #b1b1b1;
+    max-width: 600px;
+    margin-bottom: 30px;
+  }
+  
+  /* Content Sections */
+  .content-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+  
+  .cover-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding-bottom: 20px;
+  }
+  
+  .cover-container::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .cover-container::-webkit-scrollbar-track {
+    background: #1f2937;
+  }
+  
+  .cover-container::-webkit-scrollbar-thumb {
+    background: #1ce783;
+    border-radius: 4px;
+  }
+  
+  /* Cover Item Styles */
+  .cover-item {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .cover-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .cover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .cover-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 15px;
+    color: white;
+  }
+  
+  .cover-title {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 5px;
+  }
+  
+  .cover-subtitle {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+  
+  /* Loading Spinner */
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+  
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #1ce783;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
