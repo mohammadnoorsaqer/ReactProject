@@ -1,15 +1,20 @@
 import React from "react";
-import Navbar from "./Components/NavBar/NavBar";
-import Footer from "./Components/Footer/Footer.Jsx";
-import '../src/App.css'
-import MainSection from "./Components/MainSection/MainSection";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Navbar from "./Components/NavBar/NavBar.jsx";
+import Footer from "./Components/Footer/Footer.jsx";
+import MainSection from "./Components/MainSection/MainSection.jsx";
+import MovieDetails from "./Components/MovieDetails/MovieDetails.jsx";
+import "../src/App.css";
 const App = () => {
   return (
-    <div>
+    <Router>
       <Navbar />
-      <MainSection />
+      <Routes>
+      <Route path="/" element={<MainSection />} />
+      <Route path="/movie/:id" element={<MovieDetails />} />  {/* MovieDetails route */}
+      </Routes>
       <Footer />
-    </div>
+    </Router>
   );
 };
 

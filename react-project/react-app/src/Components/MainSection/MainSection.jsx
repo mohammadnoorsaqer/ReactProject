@@ -1,6 +1,7 @@
 import "./MainSection.css";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
 const MainSection = () => {
   const [movies, setMovies] = useState([]);
@@ -48,15 +49,18 @@ const MainSection = () => {
 
     return (
       <div key={item.id} className="cover-item">
-        <img 
-          src={imageUrl} 
-          alt={item.title || item.name} 
-          className="cover-image"
-        />
-        <div className="cover-overlay">
-          <div className="cover-title">{item.title || item.name}</div>
-          <h3 className="cover-subtitle">{item.original_title || item.original_name}</h3>
-        </div>
+        {/* Link to MovieDetails page */}
+        <Link to={`/movie/${item.id}`}>
+          <img 
+            src={imageUrl} 
+            alt={item.title || item.name} 
+            className="cover-image"
+          />
+          <div className="cover-overlay">
+            <div className="cover-title">{item.title || item.name}</div>
+            <h3 className="cover-subtitle">{item.original_title || item.original_name}</h3>
+          </div>
+        </Link>
       </div>
     );
   };
