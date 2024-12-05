@@ -5,62 +5,53 @@ import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
 const MainSection = () => {
   const [movies, setMovies] = useState([]);
-  const [popularTv, setPopularTv] = useState([]);
-  const [trendingTv, setTrendingTv] = useState([]);
-  const [huluOriginals, setHuluOriginals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); // Error state for better error handling
-  const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+  const imageBaseUrl = '';
 
   useEffect(() => {
-    // Fetch data from the Laravel API
-    Promise.all([
-      axios.get('http://localhost:8000/api/movies'),
-      axios.get('http://localhost:8000/api/popular-tv'),
-      axios.get('http://localhost:8000/api/trending-tv'),
-      axios.get('http://localhost:8000/api/hulu-originals'),
-    ])
-    .then(([moviesResponse, popularTvResponse, trendingTvResponse, huluOriginalsResponse]) => {
-      if (moviesResponse.data.movies) {
-        setMovies(moviesResponse.data.movies);
-      }
-      if (popularTvResponse.data.tv_shows) {
-        setPopularTv(popularTvResponse.data.tv_shows);
-      }
-      if (trendingTvResponse.data.tv_shows) {
-        setTrendingTv(trendingTvResponse.data.tv_shows);
-      }
-      if (huluOriginalsResponse.data.tv_shows) {
-        setHuluOriginals(huluOriginalsResponse.data.tv_shows);
-      }
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error('There was an error fetching the data!', error);
-      setError(error.response?.data?.error || 'Failed to fetch data');
-      setLoading(false);
-    });
+    // Fetch movies data from the Laravel API
+    axios.get('http://localhost:8000/api/movies')
+      .then(response => {
+        // Assuming the response contains the movie data in a `data` field
+        setMovies(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the data!', error);
+        setError(error.response?.data?.error || 'Failed to fetch data');
+        setLoading(false);
+      });
   }, []);
 
-  const renderCover = (item) => {
-    const imageUrl = item.poster_path
-      ? `${imageBaseUrl}${item.poster_path}`
+  const renderCover = (movie) => {
+    const imageUrl = movie.image_url
+      ? `${imageBaseUrl}${movie.image_url}` // Assuming the backend provides the image URL
       : 'https://via.placeholder.com/500x750?text=No+Image'; // Placeholder image
 
     return (
-      <div key={item.id} className="cover-item">
-        {/* Link to MovieDetails or TVShowDetails page */}
-        <Link to={item.title ? `/movie/${item.id}` : `/tv-show/${item.id}`}>
+      <div key={movie.id} className="cover-item">
+        {/* Link to MovieDetails page */}
+        <Link to={`/movie/${movie.id}`}>
           <img 
             src={imageUrl} 
-            alt={item.title || item.name} 
+            alt={movie.title || "No Title"} // Fallback for missing title
             className="cover-image"
           />
           <div className="cover-overlay">
-            <div className="cover-title">{item.title || item.name}</div>
-            <h3 className="cover-subtitle">{item.original_title || item.original_name}</h3>
+            <div className="cover-title">{movie.title || 'Untitled'}</div>
+            <h3 className="cover-subtitle">{movie.release_date || 'Release Date Unknown'}</h3>
           </div>
         </Link>
+
+        {/* Video URL - Display a link or button */}
+        {movie.video_url && (
+          <div className="video-link">
+            <a href={movie.video_url} target="_blank" rel="noopener noreferrer">
+              <button className="watch-video-button">Watch Video</button>
+            </a>
+          </div>
+        )}
       </div>
     );
   };
@@ -84,79 +75,11 @@ const MainSection = () => {
             <div className="content-section">
               <h3>Movies</h3>
               <div className="cover-container">
-                {movies.map((movie) => renderCover(movie))}
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Popular TV Shows Section */}
-      <section className="categories">
-        <h4>Popular TV Shows</h4>
-        <div className="content-wrapper">
-          {loading ? (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-              <p>Loading...</p>
-            </div>
-          ) : error ? (
-            <div className="error-message">
-              <p>{error}</p>
-            </div>
-          ) : (
-            <div className="content-section">
-              <h3>Popular TV Shows</h3>
-              <div className="cover-container">
-                {popularTv.map((show) => renderCover(show))}
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Trending TV Shows Section */}
-      <section className="categories">
-        <h4>Trending TV Shows</h4>
-        <div className="content-wrapper">
-          {loading ? (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-              <p>Loading...</p>
-            </div>
-          ) : error ? (
-            <div className="error-message">
-              <p>{error}</p>
-            </div>
-          ) : (
-            <div className="content-section">
-              <h3>Trending TV Shows</h3>
-              <div className="cover-container">
-                {trendingTv.map((show) => renderCover(show))}
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Hulu Originals Section */}
-      <section className="categories">
-        <h4>Hulu Originals</h4>
-        <div className="content-wrapper">
-          {loading ? (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-              <p>Loading...</p>
-            </div>
-          ) : error ? (
-            <div className="error-message">
-              <p>{error}</p>
-            </div>
-          ) : (
-            <div className="content-section">
-              <h3>Hulu Originals</h3>
-              <div className="cover-container">
-                {huluOriginals.map((show) => renderCover(show))}
+                {movies.length > 0 ? (
+                  movies.map((movie) => renderCover(movie))
+                ) : (
+                  <p>No movies available.</p> // Handle empty movie list
+                )}
               </div>
             </div>
           )}
