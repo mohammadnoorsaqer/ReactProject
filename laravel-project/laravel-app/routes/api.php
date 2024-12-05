@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\ShowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware(['api'])->group(function () {
     Route::get('/movies', [MovieController::class, 'index']);
     Route::get('/movies/{id}', [MovieController::class, 'show']);
+    Route::get('/shows', [ShowController::class, 'index']);
+
 
 
 
