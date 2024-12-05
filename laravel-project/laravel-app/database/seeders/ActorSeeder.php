@@ -12,6 +12,7 @@ class ActorSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+
+
     }
 }
