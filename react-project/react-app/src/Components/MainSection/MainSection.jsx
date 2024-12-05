@@ -10,6 +10,7 @@ const MainSection = () => {
   const [loadingShows, setLoadingShows] = useState(true);
   const [errorMovies, setErrorMovies] = useState(null); // Error state for movies
   const [errorShows, setErrorShows] = useState(null); // Error state for shows
+  const [selectedCategory, setSelectedCategory] = useState('movies'); // Track selected category
 
   useEffect(() => {
     // Fetch movies data from the Laravel API
@@ -38,18 +39,16 @@ const MainSection = () => {
   }, []);
 
   const renderCover = (item, isMovie = true) => {
-    // Image path will be based on the public folder in React
     const imageUrl = item.image_url
       ? `${item.image_url}` // Directly access image from /public/images/
       : 'https://via.placeholder.com/500x750?text=No+Image'; // Placeholder image
 
     return (
       <div key={item.id} className="cover-item">
-        {/* Link to Item Details page */}
         <Link to={`/${isMovie ? 'movie' : 'show'}/${item.id}`}>
           <img 
             src={imageUrl} 
-            alt={item.title || "No Title"} // Fallback for missing title
+            alt={item.title || "No Title"} 
             className="cover-image"
           />
           <div className="cover-overlay">
@@ -58,7 +57,6 @@ const MainSection = () => {
           </div>
         </Link>
 
-        {/* Video URL - Display a link or button */}
         {item.video_url && (
           <div className="video-link">
             <a href={item.video_url} target="_blank" rel="noopener noreferrer">
@@ -70,61 +68,76 @@ const MainSection = () => {
     );
   };
 
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <main className="main-content">
-      {/* Movies Section */}
+      {/* Categories Section */}
       <section className="categories">
-        <h4>Movies</h4>
+        <div className="category-buttons">
+          <button 
+            className={`category-button ${selectedCategory === 'movies' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('movies')}
+          >
+            Movies
+          </button>
+          <button 
+            className={`category-button ${selectedCategory === 'shows' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('shows')}
+          >
+            TV Shows
+          </button>
+        </div>
+
         <div className="content-wrapper">
-          {loadingMovies ? (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-              <p>Loading movies...</p>
-            </div>
-          ) : errorMovies ? (
-            <div className="error-message">
-              <p>{errorMovies}</p>
-            </div>
-          ) : (
+          {/* Conditional Rendering Based on Selected Category */}
+          {selectedCategory === 'movies' ? (
             <div className="content-section">
               <h3>Movies</h3>
               <div className="cover-container">
-                {movies.length > 0 ? (
-                  movies.map((movie) => renderCover(movie, true))
+                {loadingMovies ? (
+                  <div className="loading-spinner">
+                    <div className="spinner"></div>
+                    <p>Loading movies...</p>
+                  </div>
+                ) : errorMovies ? (
+                  <div className="error-message">
+                    <p>{errorMovies}</p>
+                  </div>
                 ) : (
-                  <p>No movies available.</p>
+                  movies.length > 0 ? (
+                    movies.map((movie) => renderCover(movie, true))
+                  ) : (
+                    <p>No movies available.</p>
+                  )
                 )}
               </div>
             </div>
-          )}
-        </div>
-      </section>
-
-      {/* TV Shows Section */}
-      <section className="categories">
-        <h4>TV Shows</h4>
-        <div className="content-wrapper">
-          {loadingShows ? (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-              <p>Loading TV shows...</p>
-            </div>
-          ) : errorShows ? (
-            <div className="error-message">
-              <p>{errorShows}</p>
-            </div>
-          ) : (
+          ) : selectedCategory === 'shows' ? (
             <div className="content-section">
               <h3>TV Shows</h3>
               <div className="cover-container">
-                {shows.length > 0 ? (
-                  shows.map((show) => renderCover(show, false))
+                {loadingShows ? (
+                  <div className="loading-spinner">
+                    <div className="spinner"></div>
+                    <p>Loading TV shows...</p>
+                  </div>
+                ) : errorShows ? (
+                  <div className="error-message">
+                    <p>{errorShows}</p>
+                  </div>
                 ) : (
-                  <p>No TV shows available.</p>
+                  shows.length > 0 ? (
+                    shows.map((show) => renderCover(show, false))
+                  ) : (
+                    <p>No TV shows available.</p>
+                  )
                 )}
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </section>
     </main>
