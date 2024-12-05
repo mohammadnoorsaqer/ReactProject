@@ -12,15 +12,13 @@ class ShowSeeder extends Seeder
      */
     public function run(): void
     {
-
         Show::create([
             'title' => 'Stranger Things',
             'description' => 'A young girl with extraordinary powers helps a group of friends find a missing child in a supernatural mystery.',
             'release_date' => 2016,
             'is_popular' => true, 
-            'image_url' => 'images/stranger-things.jpg',
+            'image_url' => '/images/stranger-things.jpg',  // Corrected image URL
             'video_url' => 'https://www.youtube.com/embed/mnd7sFt5c3A',
-
         ]);
 
         Show::create([
@@ -28,9 +26,8 @@ class ShowSeeder extends Seeder
             'description' => 'A high school chemistry teacher turned methamphetamine producer partners with a former student to create and sell high-quality meth.',
             'release_date' => 2008,
             'is_popular' => true,
-            'image_url' => 'images/breaking-bad.jpg',
+            'image_url' => '/images/breaking-bad.jpg',  // Corrected image URL
             'video_url' => 'https://www.youtube.com/embed/HhesaQXLuRY',
-
         ]);
 
         Show::create([
@@ -38,9 +35,8 @@ class ShowSeeder extends Seeder
             'description' => 'A drama series about the reign of Queen Elizabeth II of the United Kingdom, exploring her relationships with her family, country, and advisors.',
             'release_date' => 2016,
             'is_popular' => true, 
-            'image_url' => 'images/the-crown.jfif',
+            'image_url' => '/images/the-crown.jfif',  // Corrected image URL
             'video_url' => 'https://www.youtube.com/embed/JWtnJjn6ng0',
-
         ]);
 
         Show::create([
@@ -48,28 +44,26 @@ class ShowSeeder extends Seeder
             'description' => 'An anthology series that explores a twisted, high-tech multiverse where humanity\'s greatest innovations and darkest instincts collide.',
             'release_date' => 2011,
             'is_popular' => false,
-            'image_url' => 'images/black-mirror.jpg',
+            'image_url' => '/images/black-mirror.jpg',  // Corrected image URL
             'video_url' => 'https://www.youtube.com/embed/-qIlCo9yqpY',
-
         ]);
+
         Show::create([
             'title' => 'From',
             'description' => 'Unravel the mystery of a city in middle U.S.A. that imprisons everyone who enters. As the residents struggle to maintain a sense of normality and seek a way out, they must also survive the threats of the surrounding forest.',
             'release_date' => 2022,
             'is_popular' => false,
-            'image_url' => 'images/from.jfif',
+            'image_url' => '/images/from.jfif',  // Corrected image URL
             'video_url' => 'https://www.youtube.com/embed/pDHqAj4eJcM',
-
         ]);
+
         Show::create([
             'title' => 'Manifest',
             'description' => 'When a commercial airliner suddenly reappears after being missing for five years, those aboard must reintegrate into society.',
             'release_date' => 2018,
             'is_popular' => true,
-            'image_url' => 'images/manifest.jpg',
+            'image_url' => '/images/manifest.jpg',  // Corrected image URL
             'video_url' => 'https://www.youtube.com/embed/I1hNAIzkQWY',
-
         ]);
-
     }
 }

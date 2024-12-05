@@ -26,7 +26,7 @@ class MovieSeeder extends Seeder
                 'description' => 'A hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.',
                 'release_date' => 1999,
                 'is_popular' => true,
-                'image_url' => 'images/thematrixx.jpg',
+                'image_url' => '/images/thematrixx.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/vKQi3bBA1y8',
                 'genres' => [$action->id, $sciFi->id],
             ],
@@ -35,7 +35,7 @@ class MovieSeeder extends Seeder
                 'description' => 'A thief who steals corporate secrets through dream-sharing technology is tasked with planting an idea into the mind of a CEO.',
                 'release_date' => 2010,
                 'is_popular' => true,
-                'image_url' => 'images/the-inception.jfif',
+                'image_url' => '/images/the-inception.jfif', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/YoHD9XEInc0',
                 'genres' => [$action->id, $sciFi->id],
             ],
@@ -44,7 +44,7 @@ class MovieSeeder extends Seeder
                 'description' => 'When the menace known as The Joker emerges, he wreaks havoc on the people of Gotham.',
                 'release_date' => 2008,
                 'is_popular' => true,
-                'image_url' => 'images/darknightt.jpg',
+                'image_url' => '/images/darknightt.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/EXeTwQWrcwY',
                 'genres' => [$action->id, $thriller->id],
             ],
@@ -53,7 +53,7 @@ class MovieSeeder extends Seeder
                 'description' => 'Explorers travel through a wormhole in space to ensure humanity’s survival.',
                 'release_date' => 2014,
                 'is_popular' => false,
-                'image_url' => 'images/maxresdefault.jpg',
+                'image_url' => '/images/maxresdefault.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/2LqzF5WauAw',
                 'genres' => [$sciFi->id, $drama->id],
             ],
@@ -62,7 +62,7 @@ class MovieSeeder extends Seeder
                 'description' => 'After barely surviving his wounds, Tyler Rake is back for another mission.',
                 'release_date' => 2023,
                 'is_popular' => true,
-                'image_url' => 'images/extraction.jpg',
+                'image_url' => '/images/extraction.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/Y274jZs5s7s',
                 'genres' => [$action->id],
             ],
@@ -71,7 +71,7 @@ class MovieSeeder extends Seeder
                 'description' => 'A master thief and his ex-girlfriend team up to steal gold bullion on a passenger flight.',
                 'release_date' => 2024,
                 'is_popular' => true,
-                'image_url' => 'images/lift.jpg',
+                'image_url' => '/images/lift.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/m2L-Sa_6MU0',
                 'genres' => [$action->id],
             ],
@@ -80,7 +80,7 @@ class MovieSeeder extends Seeder
                 'description' => 'An Interpol agent tracks a notorious art thief with a rival thief’s help.',
                 'release_date' => 2021,
                 'is_popular' => true,
-                'image_url' => 'images/rednotice.jpg',
+                'image_url' => '/images/rednotice.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/T6l3mM7AWew',
                 'genres' => [$action->id],
             ],
@@ -89,7 +89,7 @@ class MovieSeeder extends Seeder
                 'description' => 'A vigilante team stages a coup d’état against a dictator.',
                 'release_date' => 2019,
                 'is_popular' => true,
-                'image_url' => 'images/1178893.jpg',
+                'image_url' => '/images/1178893.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/YLE85olJjp8',
                 'genres' => [$action->id],
             ],
