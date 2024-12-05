@@ -49,8 +49,8 @@ const MainSection = () => {
 
     return (
       <div key={item.id} className="cover-item">
-        {/* Link to MovieDetails page */}
-        <Link to={`/movie/${item.id}`}>
+        {/* Link to MovieDetails or TVShowDetails page */}
+        <Link to={item.title ? `/movie/${item.id}` : `/tv-show/${item.id}`}>
           <img 
             src={imageUrl} 
             alt={item.title || item.name} 

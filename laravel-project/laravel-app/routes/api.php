@@ -25,5 +25,7 @@ Route::get('trending-tv', [MovieController::class, 'getTrendingTvShows']);
 Route::get('hulu-originals', [MovieController::class, 'getHuluOriginals']);
 Route::get('movies/category/{category}', [MovieController::class, 'getMoviesByCategory']);
 Route::get('movies/{movieId}', [MovieController::class, 'getMovieDetails']);
+Route::get('tv-show/{id}', [MovieController::class, 'getTvShowDetails']);
+
 });
 

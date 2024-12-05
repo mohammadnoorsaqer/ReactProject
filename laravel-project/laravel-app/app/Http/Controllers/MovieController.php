@@ -17,7 +17,7 @@ class MovieController extends Controller
 
         // Check if response is successful
         if ($response->successful()) {
-            // Return only the movie results
+            // Return only the movie results    
             return response()->json([
                 'movies' => $response->json()['results'],
             ]);
@@ -105,7 +105,40 @@ class MovieController extends Controller
             ], 500);
         }
     }
-
+    public function getTvShowDetails($tvShowId)
+    {
+        $apiKey = env('TMDB_API_KEY');
+        
+        // Fetch TV show details
+        $tvShowUrl = "https://api.themoviedb.org/3/tv/{$tvShowId}?api_key=$apiKey&language=en-US";
+        $tvShowResponse = Http::withoutVerifying()->get($tvShowUrl);
+    
+        // Fetch videos (trailers) for the TV show
+        $videoUrl = "https://api.themoviedb.org/3/tv/{$tvShowId}/videos?api_key=$apiKey&language=en-US";
+        $videoResponse = Http::withoutVerifying()->get($videoUrl);
+    
+        if ($tvShowResponse->successful() && $videoResponse->successful()) {
+            $tvShowData = $tvShowResponse->json();
+            $videoData = $videoResponse->json();
+    
+            // Find YouTube trailer for the TV show (if available)
+            $trailer = collect($videoData['results'])
+                ->first(function ($video) {
+                    return $video['site'] === 'YouTube' && 
+                           (stripos($video['type'], 'trailer') !== false || 
+                            stripos($video['type'], 'teaser') !== false);
+                });
+    
+            return response()->json([
+                'tv_show' => $tvShowData,
+                'trailer' => $trailer // This could be null if no trailer is found
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'Failed to fetch data from TMDB API',
+            ], 500);
+        }
+    }
     public function getMovieDetails($movieId)
     {
         $apiKey = env('TMDB_API_KEY');
