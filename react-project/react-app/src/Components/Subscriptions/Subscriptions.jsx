@@ -7,21 +7,32 @@ const Subscriptions = () => {
   const [error, setError] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false); // Track subscription status
   const [subscriptionType, setSubscriptionType] = useState('');
-  
+
   // Fetch subscription status when the component mounts
   useEffect(() => {
     const fetchSubscriptionStatus = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/check-subscription');
-        if (response.data.isSubscribed) {
-          setIsSubscribed(true);
-          setSubscriptionType(response.data.subscriptionType);
+      // Check if the subscription is stored in localStorage
+      const storedIsSubscribed = localStorage.getItem('isSubscribed');
+      const storedSubscriptionType = localStorage.getItem('subscriptionType');
+      
+      if (storedIsSubscribed === 'true') {
+        setIsSubscribed(true);
+        setSubscriptionType(storedSubscriptionType);
+      } else {
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/api/check-subscription');
+          if (response.data.isSubscribed) {
+            setIsSubscribed(true);
+            setSubscriptionType(response.data.subscriptionType);
+            localStorage.setItem('isSubscribed', true); // Save to localStorage
+            localStorage.setItem('subscriptionType', response.data.subscriptionType); // Save to localStorage
+          }
+        } catch (error) {
+          console.error('Error fetching subscription status:', error);
         }
-      } catch (error) {
-        console.error('Error fetching subscription status:', error);
       }
     };
-    
+
     fetchSubscriptionStatus();
   }, []);
 
@@ -80,27 +91,34 @@ const Subscriptions = () => {
       showCancelButton: true,
       confirmButtonText: 'Subscribe',
       customClass: {
-        popup: 'payment-popup'
-      }
+        popup: 'payment-popup',
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         const startedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const expiresAt = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().slice(0, 19).replace('T', ' ');
 
         try {
-          const response = await axios.post('http://127.0.0.1:8000/api/subscribe', {
-            plan_name: type,
-            price: price,
-            started_at: startedAt,
-            expires_at: expiresAt,
-          }, {
-            headers: {
-              'Content-Type': 'application/json',
+          const response = await axios.post(
+            'http://127.0.0.1:8000/api/subscribe',
+            {
+              plan_name: type,
+              price: price,
+              started_at: startedAt,
+              expires_at: expiresAt,
             },
-          });
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
 
+          // Update subscription state and save it to localStorage
           setIsSubscribed(true); // Set subscription status to true
           setSubscriptionType(type); // Set the current subscription type
+          localStorage.setItem('isSubscribed', true); // Save to localStorage
+          localStorage.setItem('subscriptionType', type); // Save to localStorage
 
           Swal.fire({
             icon: 'success',
@@ -132,16 +150,23 @@ const Subscriptions = () => {
 
     if (confirmed.isConfirmed) {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/cancel-subscription', {
-          plan_name: subscriptionType,
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await axios.post(
+          'http://127.0.0.1:8000/api/cancel-subscription',
+          {
+            plan_name: subscriptionType,
           },
-        });
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
 
+        // Update subscription state and clear localStorage
         setIsSubscribed(false); // Set subscription status to false
         setSubscriptionType(''); // Clear the subscription type
+        localStorage.removeItem('isSubscribed'); // Remove from localStorage
+        localStorage.removeItem('subscriptionType'); // Remove from localStorage
 
         Swal.fire({
           icon: 'success',
@@ -222,40 +247,48 @@ const Subscriptions = () => {
             </ul>
           </div>
           <button 
-            className="subscribe-btn"
-            onClick={() => isSubscribed ? cancelSubscription() : bookSubscription("Basic", 9.99)}
+            className={`btn ${isSubscribed && subscriptionType === 'Basic' ? 'disabled' : ''}`}
+            onClick={() => bookSubscription('Basic', 9.99)}
+            disabled={isSubscribed && subscriptionType === 'Basic'}
           >
-            {isSubscribed && subscriptionType === "Basic" ? "Cancel Subscription" : "Get Basic Plan"}
+            {isSubscribed && subscriptionType === 'Basic' ? 'Already Subscribed' : 'Subscribe Now'}
           </button>
         </div>
-
+        
         <div className="subscription-card premium">
           <div className="plan-header">
             <h2>Premium</h2>
             <span className="price">$19.99 / month</span>
-            <div className="best-value">Best Value</div>
           </div>
           <div className="plan-features">
             <ul>
               <li>✓ No Ads</li>
-              <li>✓ 4K UHD Streaming</li>
+              <li>✓ 4K Streaming</li>
               <li>✓ Full Catalog Access</li>
               <li>✓ 4 Simultaneous Streams</li>
-              <li>✓ Premium Customer Support</li>
               <li>✓ Exclusive Originals</li>
-              <li>✓ Sports Channels</li>
               <li>✓ Offline Downloads</li>
-              <li>✓ Local Channels</li>
+              <li>✓ Priority Customer Support</li>
             </ul>
           </div>
-          <button 
-            className="subscribe-btn"
-            onClick={() => isSubscribed ? cancelSubscription() : bookSubscription("Premium", 19.99)}
+          <button
+            className={`btn ${isSubscribed && subscriptionType === 'Premium' ? 'disabled' : ''}`}
+            onClick={() => bookSubscription('Premium', 19.99)}
+            disabled={isSubscribed && subscriptionType === 'Premium'}
           >
-            {isSubscribed && subscriptionType === "Premium" ? "Cancel Subscription" : "Get Premium Plan"}
+            {isSubscribed && subscriptionType === 'Premium' ? 'Already Subscribed' : 'Subscribe Now'}
           </button>
         </div>
       </div>
+
+      {isSubscribed && (
+        <div className="subscription-status">
+          <p>You are currently subscribed to the {subscriptionType} plan.</p>
+          <button className="cancel-btn" onClick={cancelSubscription}>
+            Cancel Subscription
+          </button>
+        </div>
+      )}
     </div>
   );
 };

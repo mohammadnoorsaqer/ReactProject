@@ -11,8 +11,23 @@ const MovieDetails = () => {
 
   // Function to add movie to watchlist
   const addToWatchlist = (movieId) => {
+    const token = localStorage.getItem("auth_token"); // Assuming you store the token in localStorage
+  
+    if (!token) {
+      alert("Please login to add movies to your watchlist.");
+      return;
+    }
+  
     axios
-      .post('http://localhost:8000/api/watchlist', { movie_id: movieId })
+      .post(
+        'http://localhost:8000/api/watchlist', 
+        { movie_id: movieId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}` // Include token in the headers
+          }
+        }
+      )
       .then((response) => {
         alert("Added to Watchlist!");
       })
@@ -21,21 +36,7 @@ const MovieDetails = () => {
         alert("Failed to add to watchlist.");
       });
   };
-  // axios
-  // .post('http://localhost:8000/api/watchlist', { movie_id: movieId }, {
-  //   headers: {
-  //     Authorization: `Bearer ${yourAuthToken}` // replace with actual token
-  //   }
-  // })
-  // .then((response) => {
-  //   alert("Added to Watchlist!");
-  // })
-  // .catch((error) => {
-  //   console.error("Error adding to watchlist:", error.response || error);
-  //   alert("Failed to add to watchlist.");
-  // });
-
-
+  
   useEffect(() => {
     axios
       .get(`http://localhost:8000/api/movies/${id}`)
@@ -53,11 +54,11 @@ const MovieDetails = () => {
   // Generate a gradient background dynamically
   const generateDynamicBackground = () => {
     const colors = [
-      'linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d)',
-      'linear-gradient(135deg, #000428, #004e92)',
-      'linear-gradient(135deg, #3494e6, #ec6ead)',
-      'linear-gradient(135deg, #41295a, #2F0743)',
-      'linear-gradient(135deg, #0F2027, #203A43, #2c5364)'
+      "linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d)",
+      "linear-gradient(135deg, #000428, #004e92)",
+      "linear-gradient(135deg, #3494e6, #ec6ead)",
+      "linear-gradient(135deg, #41295a, #2F0743)",
+      "linear-gradient(135deg, #0F2027, #203A43, #2c5364)",
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   };
@@ -78,18 +79,17 @@ const MovieDetails = () => {
   if (!movie) {
     return <div className="movie-details-error">No movie found.</div>;
   }
-  
 
   return (
     <div className="movie-details-container">
-      <div 
-        className="movie-details-header" 
+      <div
+        className="movie-details-header"
         style={{
-          background: movie.background_image 
-            ? `url(${movie.background_image})` 
+          background: movie.background_image
+            ? `url(${movie.background_image})`
             : generateDynamicBackground(),
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <img
@@ -99,19 +99,15 @@ const MovieDetails = () => {
         />
         <div className="movie-info">
           <h1 className="movie-title">{movie.title || "Untitled"}</h1>
-          
+
           <div className="movie-details-meta">
             <span>{movie.release_date || "TBA"}</span>
             <span>•</span>
             <span>{movie.genre || "Unknown Genre"}</span>
-            {movie.rating && (
-              <span className="movie-rating">{movie.rating}/10</span>
-            )}
+            {movie.rating && <span className="movie-rating">{movie.rating}/10</span>}
           </div>
 
-          <p className="movie-description">
-            {movie.description || "No description available."}
-          </p>
+          <p className="movie-description">{movie.description || "No description available."}</p>
 
           <div className="movie-action-buttons">
             <button className="btn-play">
@@ -126,7 +122,7 @@ const MovieDetails = () => {
       </div>
 
       {movie.video_url && (
-        <div className="movie-video-section" style={{ marginBottom: '50px' }}>
+        <div className="movie-video-section" style={{ marginBottom: "50px" }}>
           <iframe
             src={movie.video_url.replace("watch?v=", "embed/")}
             title="Trailer"
