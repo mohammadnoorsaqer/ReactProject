@@ -12,4 +12,14 @@ class ShowController extends Controller
         // Return all shows with required data
         return response()->json(Show::all());
     }
+    public function show($id)
+    {
+        // Return a specific movie by id
+        $show = Show::find($id);
+        if ($show) {
+            return response()->json($show);
+        } else {
+            return response()->json(['error' => 'Show not found'], 404);
+        }
+    }
 }
