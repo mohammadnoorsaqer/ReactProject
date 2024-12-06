@@ -1,7 +1,6 @@
-// resources/js/components/Navbar.jsx
 import React from 'react';
-import { Link } from '@inertiajs/react';
 import "./NavBar.css";
+import { Link } from "react-router-dom";
 
 
 const Navbar = () => {
@@ -10,7 +9,7 @@ const Navbar = () => {
       <nav>
         <ul>
           <li>
-          <Link href="/login" className="login-btn">Log In</Link>  {/* Link to Login page */}
+            <Link href="/login" className="login-btn">Log In</Link> {/* Link to Login page */}
           </li>
         </ul>
       </nav>
@@ -25,7 +24,12 @@ const Navbar = () => {
         <div className="header-text-2">
           HBO Max™, SHOWTIME®, CINEMAX® and STARZ® available as add-ons.
         </div>
-        <button className="btn btn-cta">Start Your Free Trial</button>
+        {/* Link to Subscriptions page */}
+<Link to="/subscriptions" className="btn btn-cta">
+  Start Your Free Trial
+</Link>
+
+
         <div className="legal-text">
           Free trial for new & eligible returning subscribers only.
         </div>

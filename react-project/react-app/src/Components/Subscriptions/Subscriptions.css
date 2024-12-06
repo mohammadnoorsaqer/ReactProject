@@ -1,0 +1,117 @@
+body {
+    background-color: #0b0c0f;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .subscriptions-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  
+  .subscriptions-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .subscriptions-header h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+  
+  .subscriptions-header p {
+    color: #a1a1a1;
+  }
+  
+  .subscription-plans {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+  }
+  
+  .subscription-card {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    padding: 30px;
+    width: 350px;
+    text-align: center;
+    transition: transform 0.3s;
+    position: relative;
+    border: 2px solid #333;
+  }
+  
+  .subscription-card:hover {
+    transform: scale(1.05);
+    border-color: #1db954;
+  }
+  
+  .plan-header {
+    margin-bottom: 20px;
+  }
+  
+  .plan-header h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .price {
+    font-size: 1.5rem;
+    color: #1db954;
+  }
+  
+  .best-value {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #1db954;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  .plan-features ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+  }
+  
+  .plan-features li {
+    margin-bottom: 15px;
+    color: #a1a1a1;
+    text-align: left;
+    padding-left: 30px;
+    position: relative;
+  }
+  
+  .plan-features li::before {
+    position: absolute;
+    left: 0;
+  }
+  
+  .plan-features li[class*="✓"]::before {
+    content: '✓';
+    color: #1db954;
+  }
+  
+  .plan-features li[class*="✗"]::before {
+    content: '✗';
+    color: #ff0000;
+  }
+  
+  .subscribe-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #1db954;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .subscribe-btn:hover {
+    background-color: #1ed760;
+  }
