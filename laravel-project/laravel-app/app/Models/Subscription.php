@@ -1,5 +1,5 @@
 <?php
-
+// Subscription Model
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,12 +9,14 @@ class Subscription extends Model
 {
     use HasFactory;
 
+    // Add 'canceled_at' to the fillable array
     protected $fillable = [
         'user_id',
         'plan_name',
         'price',
         'started_at',
         'expires_at',
+        'canceled_at', // Add canceled_at here
     ];
 
     // Relationships
@@ -23,4 +25,3 @@ class Subscription extends Model
         return $this->belongsTo(User::class);
     }
 }
-

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
-  
+
   // State variables to hold the form input values
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -17,15 +17,17 @@ const Register = () => {
     e.preventDefault();
     setError(""); // Reset any previous error
 
+    // Check if the passwords match
     if (password !== passwordConfirmation) {
       setError("Passwords do not match");
       return;
     }
 
     try {
+      // Send the form data with password_confirmation
       const response = await axios.post(
         "http://127.0.0.1:8000/api/register", // Update with your Laravel API endpoint
-        { name, email, password }
+        { name, email, password, password_confirmation: passwordConfirmation }
       );
 
       // Handle successful registration (e.g., redirect to login or home page)
@@ -34,6 +36,7 @@ const Register = () => {
       }
     } catch (err) {
       // Handle error if API call fails
+      console.log(err.response); // Log detailed error response
       setError("Registration failed. Please try again.");
     }
   };

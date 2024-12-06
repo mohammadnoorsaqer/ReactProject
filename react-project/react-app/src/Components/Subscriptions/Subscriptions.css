@@ -4,24 +4,68 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
-  .subscriptions-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 40px 20px;
+  .subscription-form {
+    background-color: #1a1a1a;
+    padding: 30px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    margin: 40px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
-  .subscriptions-header {
+  .subscription-form h2 {
     text-align: center;
-    margin-bottom: 40px;
+    font-size: 2rem;
+    margin-bottom: 20px;
   }
   
-  .subscriptions-header h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
+  .form-group {
+    margin-bottom: 15px;
   }
   
-  .subscriptions-header p {
+  label {
+    display: block;
+    font-weight: bold;
     color: #a1a1a1;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #1a1a1a;
+    color: white;
+  }
+  
+  input::placeholder {
+    color: #a1a1a1;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #1db954;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+  }
+  
+  .submit-btn:hover {
+    background-color: #1ed760;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
   }
   
   .subscription-plans {
@@ -115,3 +159,4 @@ body {
   .subscribe-btn:hover {
     background-color: #1ed760;
   }
+  

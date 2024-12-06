@@ -6,6 +6,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ShowController;
 use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |---------------------------------------------------------------------------
@@ -32,6 +33,10 @@ Route::middleware(['api'])->group(function () {
     Route::get('/movies/{id}', [MovieController::class, 'show']);
     Route::get('/shows', [ShowController::class, 'index']);
     Route::get('/shows/{id}', [ShowController::class, 'show']);
+    Route::post('subscribe', [SubscriptionController::class, 'store']);
+
+    Route::post('/cancel-subscription', [SubscriptionController::class, 'cancelSubscription']);
+
     
     // Watchlist routes protected by auth:sanctum middleware
     Route::middleware('auth:sanctum')->group(function () {

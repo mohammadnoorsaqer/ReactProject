@@ -11,6 +11,9 @@ const Navbar = () => {
           <li>
             <Link href="/login" className="login-btn">Log In</Link> {/* Link to Login page */}
           </li>
+          <li>
+            <Link to="/register" className="register-btn">Sign Up</Link> {/* Link to Register page */}
+          </li>
         </ul>
       </nav>
       <div className="header-content">
