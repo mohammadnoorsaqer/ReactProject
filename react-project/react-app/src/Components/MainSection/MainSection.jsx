@@ -1,26 +1,27 @@
 import "./MainSection.css";
-import './SearchBar.css'; // New search bar styles
+import './SearchBar.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
-
 const MainSection = () => {
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);
+  const [premiumMovies, setPremiumMovies] = useState([]); // New state for Premium Movies
   const [loadingMovies, setLoadingMovies] = useState(true);
   const [loadingShows, setLoadingShows] = useState(true);
+  const [loadingPremium, setLoadingPremium] = useState(false); // New loading state
   const [errorMovies, setErrorMovies] = useState(null);
   const [errorShows, setErrorShows] = useState(null);
+  const [errorPremium, setErrorPremium] = useState(null); // New error state
   const [selectedCategory, setSelectedCategory] = useState('movies');
-  const [searchTerm, setSearchTerm] = useState(''); // State to store the search term
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Fetch movies data from the Laravel API with optional search term
     const fetchMovies = async () => {
       try {
         const response = await axios.get('http://localhost:8000/api/movies', {
-          params: { search: searchTerm } // Send the search term as a query parameter
+          params: { search: searchTerm }
         });
         setMovies(response.data);
         setLoadingMovies(false);
@@ -30,11 +31,10 @@ const MainSection = () => {
       }
     };
 
-    // Fetch TV shows data from the Laravel API with optional search term
     const fetchShows = async () => {
       try {
         const response = await axios.get('http://localhost:8000/api/shows', {
-          params: { search: searchTerm } // Send the search term as a query parameter
+          params: { search: searchTerm }
         });
         setShows(response.data);
         setLoadingShows(false);
@@ -44,14 +44,27 @@ const MainSection = () => {
       }
     };
 
-    fetchMovies(); // Fetch movies whenever the search term changes
-    fetchShows(); // Fetch shows whenever the search term changes
-  }, [searchTerm]); // Trigger useEffect when the search term changes
+    const fetchPremiumMovies = async () => {
+      try {
+        setLoadingPremium(true);
+        const response = await axios.get('http://localhost:8000/api/premium-movies', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
+        setPremiumMovies(response.data);
+        setLoadingPremium(false);
+      } catch (error) {
+        setErrorPremium(error.response?.data?.error || 'Failed to fetch premium movies');
+        setLoadingPremium(false);
+      }
+    };
+
+    fetchMovies();
+    fetchShows();
+    fetchPremiumMovies();
+  }, [searchTerm]);
 
   const renderCover = (item, isMovie = true) => {
-    const imageUrl = item.image_url
-      ? `${item.image_url}` 
-      : 'https://via.placeholder.com/500x750?text=No+Image';
+    const imageUrl = item.image_url || 'https://via.placeholder.com/500x750?text=No+Image';
 
     return (
       <div key={item.id} className="cover-item">
@@ -66,24 +79,12 @@ const MainSection = () => {
             <h3 className="cover-subtitle">{item.release_date || 'Release Date Unknown'}</h3>
           </div>
         </Link>
-
-        {item.video_url && (
-          <div className="video-link">
-            <a href={item.video_url} target="_blank" rel="noopener noreferrer">
-              <button className="watch-video-button">Watch Video</button>
-            </a>
-          </div>
-        )}
       </div>
     );
   };
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // Update the search term
   };
 
   return (
@@ -102,63 +103,64 @@ const MainSection = () => {
           >
             TV Shows
           </button>
-        </div>
-
-        <div className="search-bar">
-          <input 
-            type="text" 
-            placeholder="Search movies and TV shows..."
-            value={searchTerm}
-            onChange={handleSearchChange} // Handle search input change
-          />
+          <button 
+            className={`category-button ${selectedCategory === 'premium' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('premium')}
+          >
+            Premium Movies
+          </button>
         </div>
 
         <div className="content-wrapper">
-          {selectedCategory === 'movies' ? (
+          {selectedCategory === 'movies' && (
             <div className="content-section">
               <h3>Movies</h3>
               <div className="cover-container">
                 {loadingMovies ? (
-                  <div className="loading-spinner">
-                    <div className="spinner"></div>
-                    <p>Loading movies...</p>
-                  </div>
+                  <p>Loading movies...</p>
                 ) : errorMovies ? (
-                  <div className="error-message">
-                    <p>{errorMovies}</p>
-                  </div>
+                  <p>{errorMovies}</p>
+                ) : movies.length > 0 ? (
+                  movies.map((movie) => renderCover(movie))
                 ) : (
-                  movies.length > 0 ? (
-                    movies.map((movie) => renderCover(movie, true))
-                  ) : (
-                    <p>No movies available.</p>
-                  )
+                  <p>No movies available.</p>
                 )}
               </div>
             </div>
-          ) : selectedCategory === 'shows' ? (
+          )}
+
+          {selectedCategory === 'shows' && (
             <div className="content-section">
               <h3>TV Shows</h3>
               <div className="cover-container">
                 {loadingShows ? (
-                  <div className="loading-spinner">
-                    <div className="spinner"></div>
-                    <p>Loading TV shows...</p>
-                  </div>
+                  <p>Loading TV shows...</p>
                 ) : errorShows ? (
-                  <div className="error-message">
-                    <p>{errorShows}</p>
-                  </div>
+                  <p>{errorShows}</p>
+                ) : shows.length > 0 ? (
+                  shows.map((show) => renderCover(show, false))
                 ) : (
-                  shows.length > 0 ? (
-                    shows.map((show) => renderCover(show, false))
-                  ) : (
-                    <p>No TV shows available.</p>
-                  )
+                  <p>No TV shows available.</p>
                 )}
               </div>
             </div>
-          ) : null}
+          )}
+          {selectedCategory === 'premium' && (
+            <div className="content-section">
+              <h3>Premium Movies</h3>
+              <div className="cover-container">
+                {loadingPremium ? (
+                  <p>Loading premium movies...</p>
+                ) : errorPremium ? (
+                  <p>{errorPremium}</p>
+                ) : premiumMovies.length > 0 ? (
+                  premiumMovies.map((movie) => renderCover(movie))
+                ) : (
+                  <p>No premium movies available.</p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </main>

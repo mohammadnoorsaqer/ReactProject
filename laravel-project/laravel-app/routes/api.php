@@ -7,6 +7,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PremiumMoviesController;
 
 // Public Routes
 Route::post('register', [AuthController::class, 'register']);
@@ -38,6 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/watchlist', [WatchlistController::class, 'getWatchlist']);
 });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/premium-movies', [PremiumMoviesController::class, 'index']);
+});
 // User Management Routes (Authentication Required)
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('users/{id}', [UserController::class, 'update']);
