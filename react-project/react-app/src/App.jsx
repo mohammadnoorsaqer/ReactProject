@@ -24,6 +24,15 @@ const Layout = () => {
     </div>
   );
 };
+const ShowDetails =() =>{
+  return (
+    <>
+    <Navbar />
+    <TVShowDetails />
+    <Footer />
+    </>
+  );
+};
 
 const LoginPage = () => {
   return (
@@ -65,7 +74,7 @@ function App() {
     },
     {
       path: "/show/:id",
-      element: <TVShowDetails />,
+      element: <ShowDetails />,
     },
     {
       path: "/watchlist",
@@ -88,6 +97,7 @@ function App() {
       path: "*",
       element: <div>Page not found</div>,
     },
+
   ]);
 
   return( <AuthProvider> 

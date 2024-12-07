@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 import "./TvShowDetails.css";
 
 const ShowDetails = () => {
@@ -8,35 +9,66 @@ const ShowDetails = () => {
   const [show, setShow] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showTrailerPopup, setShowTrailerPopup] = useState(false);
 
   // Function to add show to watchlist
   const addToWatchlist = (showId) => {
-    const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
-  
+    const token = localStorage.getItem("token");
+
     if (!token) {
-      alert("Please login to add shows to your watchlist.");
+      Swal.fire({
+        icon: "warning",
+        title: "Login Required",
+        text: "Please login to add shows to your watchlist.",
+      });
       return;
     }
-  
+
     axios
       .post(
-        'http://localhost:8000/api/watchlist',
-        { show_id: showId }, // Send the show_id, no need for media_type
+        "http://localhost:8000/api/watchlist",
+        { show_id: showId },
         {
           headers: {
-            Authorization: `Bearer ${token}` // Include token in the headers
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       )
-      .then((response) => {
-        alert("Added to Watchlist!");
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Added to Watchlist!",
+          text: `${show.title} has been added to your watchlist.`,
+        });
       })
       .catch((error) => {
         console.error("Error adding to watchlist:", error);
-        alert("Failed to add to watchlist.");
+        Swal.fire({
+          icon: "error",
+          title: "Failed to add",
+          text: "There was an issue adding the show to your watchlist. Please try again.",
+        });
       });
   };
-  
+
+  // Open trailer popup
+  const openTrailerPopup = () => {
+    if (show.video_url) {
+      setShowTrailerPopup(true);
+    } else {
+      Swal.fire({
+        icon: "info",
+        title: "No Trailer Available",
+        text: "Sorry, no trailer is available for this show.",
+      });
+    }
+  };
+
+  // Close trailer popup
+  const closeTrailerPopup = () => {
+    setShowTrailerPopup(false);
+  };
+
   useEffect(() => {
     axios
       .get(`http://localhost:8000/api/shows/${id}`)
@@ -50,19 +82,6 @@ const ShowDetails = () => {
         setLoading(false);
       });
   }, [id]);
-  
-
-  // Generate a gradient background dynamically
-  const generateDynamicBackground = () => {
-    const colors = [
-      'linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d)',
-      'linear-gradient(135deg, #000428, #004e92)',
-      'linear-gradient(135deg, #3494e6, #ec6ead)',
-      'linear-gradient(135deg, #41295a, #2F0743)',
-      'linear-gradient(135deg, #0F2027, #203A43, #2c5364)',
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
 
   if (loading) {
     return (
@@ -83,58 +102,63 @@ const ShowDetails = () => {
 
   return (
     <div className="show-details-container">
-      <div 
-        className="show-details-header" 
+      <div
+        className="show-details-header"
         style={{
-          background: show.background_image 
-            ? `url(${show.background_image})` 
-            : generateDynamicBackground(),
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundImage: `url(${show.background_image || ""})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
-        <img
-          className="show-poster"
-          src={show.image_url || "https://via.placeholder.com/350x525?text=No+Image"}
-          alt={show.title || "No Title"}
-        />
-        <div className="show-info">
-          <h1 className="show-title">{show.title || "Untitled"}</h1>
-          
-          <div className="show-details-meta">
-            <span>{show.release_date || "TBA"}</span>
-            <span>•</span>
-            <span>{show.genre || "Unknown Genre"}</span>
-            {show.rating && (
-              <span className="show-rating">{show.rating}/10</span>
-            )}
+        <div className="show-details-content">
+          <div className="show-poster-container">
+            <img
+              className="show-poster"
+              src={show.image_url || "https://via.placeholder.com/350x525?text=No+Image"}
+              alt={show.title || "No Title"}
+            />
           </div>
 
-          <p className="show-description">
-            {show.description || "No description available."}
-          </p>
+          <div className="show-info-container">
+            <div className="show-info">
+              <h1 className="show-title">{show.title || "Untitled"}</h1>
 
-          <div className="show-action-buttons">
-            <button className="btn-play">
-              <i className="play-icon">▶</i> Play
-            </button>
-            <button className="btn-more-info">More Info</button>
-            <button className="btn-watchlist" onClick={() => addToWatchlist(show.id)}>
-              + Watchlist
-            </button>
+              <div className="show-details-meta">
+                <span>{show.release_date || "TBA"}</span>
+                <span>•</span>
+                <span>{show.genre || "Unknown Genre"}</span>
+                {show.rating && <span className="show-rating">{show.rating}/10</span>}
+              </div>
+
+              <p className="show-description">{show.description || "No description available."}</p>
+
+              <div className="show-action-buttons">
+                <button className="btn-play" onClick={openTrailerPopup}>
+                  <i className="play-icon">▶</i> Play
+                </button>
+                <button className="btn-watchlist" onClick={() => addToWatchlist(show.id)}>
+                  + Watchlist
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {show.video_url && (
-        <div className="show-video-section" style={{ marginBottom: '50px' }}>
-          <iframe
-            src={show.video_url.replace("watch?v=", "embed/")}
-            title="Trailer"
-            className="show-trailer"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+      {/* Trailer Popup */}
+      {showTrailerPopup && (
+        <div className="trailer-popup">
+          <div className="trailer-popup-content">
+            <button className="trailer-close-btn" onClick={closeTrailerPopup}>
+              &times;
+            </button>
+            <iframe
+              src={show.video_url}
+              title="Trailer"
+              className="trailer-popup-iframe"
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       )}
     </div>
