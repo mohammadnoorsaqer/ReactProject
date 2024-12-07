@@ -98,14 +98,16 @@ const MainSection = () => {
     <main className="main-content">
       {/* Search Bar */}
       <section className="search-bar-section">
-        <input
+      <div className="search-bar-wrapper">
+        <input 
           type="text"
           placeholder="Search movies or shows..."
           value={searchTerm}
           onChange={handleSearchChange}
           className="search-bar"
         />
-      </section>
+      </div>
+    </section>
 
       <section className="categories">
         <div className="category-buttons">

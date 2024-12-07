@@ -1,70 +1,31 @@
-/* Search Bar Container */
-.search-bar {
+.search-bar-section {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.search-bar-wrapper {
   position: relative;
-  width: 100%;
-  max-width: 600px; /* Increase width for a larger search bar */
-  margin: 20px auto;
-  padding: 10px;
-  background-color: #1e1e1e; /* Dark background */
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
-  transition: all 0.3s ease;
 }
 
-/* Input Field */
-.search-bar input {
+.search-bar {
   width: 100%;
-  padding: 12px 20px;
+  background-color: #141414;
+  color: white;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 10px 15px;
   font-size: 16px;
-  color: #fff; /* White text */
-  background-color: transparent;
-  border: 2px solid transparent; /* Set default border to transparent */
-  border-radius: 30px;
   outline: none;
   transition: all 0.3s ease;
 }
 
-/* Placeholder Style */
-.search-bar input::placeholder {
-  color: #bbb; /* Light gray for placeholder text */
-  font-style: italic;
+.search-bar:focus {
+  border-color: #1ed760; /* Hulu's green accent */
+  box-shadow: 0 0 0 2px rgba(30, 215, 96, 0.3);
 }
 
-/* Input Focus State - Green Border */
-.search-bar input:focus {
-  border: 2px solid #00b140; /* Green border on focus */
-  box-shadow: 0 0 8px rgba(0, 177, 64, 0.5); /* Greenish shadow on focus */
-}
-
-/* Search Button */
-.search-bar button {
-  position: absolute;
-  right: 15px; /* Adjust for better alignment */
-  background-color: transparent;
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  font-size: 18px; /* Slightly smaller font size for the icon */
-  cursor: pointer;
-  color: #fff; /* White color for the icon */
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Search Button Hover Effect */
-.search-bar button:hover {
-  background-color: #fff; /* Change background color on hover */
-  transform: scale(1.1); /* Scale up slightly for effect */
-  color: #1e1e1e; /* Change icon color to dark */
-}
-
-/* Search Button Focus State */
-.search-bar button:focus {
-  outline: none;
-  box-shadow: 0 0 8px rgba(255, 148, 148, 0.5);
+.search-bar::placeholder {
+  color: #888;
 }
