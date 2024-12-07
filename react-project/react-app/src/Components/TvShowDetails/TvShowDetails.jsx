@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import "./TvShowDetails.css";
 
+
 const ShowDetails = () => {
   const { id } = useParams();
   const [show, setShow] = useState(null);
@@ -11,8 +12,8 @@ const ShowDetails = () => {
   const [error, setError] = useState(null);
   const [showTrailerPopup, setShowTrailerPopup] = useState(false);
 
-  // Function to add show to watchlist
-  const addToWatchlist = (showId) => {
+  // Function to add show to watchlist with SweetAlert
+  const addToWatchlist = (showId, isPremium = false) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -24,17 +25,16 @@ const ShowDetails = () => {
       return;
     }
 
+    // Adjust the data to send the right show type (regular or premium)
+    const data = isPremium ? { premium_show_id: showId } : { show_id: showId };
+
     axios
-      .post(
-        "http://localhost:8000/api/watchlist",
-        { show_id: showId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then(() => {
+      .post("http://localhost:8000/api/watchlist", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
         Swal.fire({
           icon: "success",
           title: "Added to Watchlist!",
@@ -70,16 +70,28 @@ const ShowDetails = () => {
   };
 
   useEffect(() => {
+    // Fetching regular show details first
     axios
       .get(`http://localhost:8000/api/shows/${id}`)
       .then((response) => {
         setShow(response.data);
         setLoading(false);
       })
-      .catch((error) => {
-        console.error("Error fetching show details:", error);
-        setError(error.response?.data?.error || "Failed to load show details.");
-        setLoading(false);
+      .catch(() => {
+        // If fetching regular show details fails, try fetching premium show details
+        axios
+          .get(`http://localhost:8000/api/premium-shows/${id}`)
+          .then((response) => {
+            setShow(response.data);
+            setLoading(false);
+            // Flag this show as premium if it's found in the premium-shows endpoint
+            setShow((prevShow) => ({ ...prevShow, isPremium: true }));
+          })
+          .catch((error) => {
+            console.error("Error fetching show details:", error);
+            setError(error.response?.data?.error || "Failed to load show details.");
+            setLoading(false);
+          });
       });
   }, [id]);
 
@@ -114,10 +126,7 @@ const ShowDetails = () => {
           <div className="show-poster-container">
             <img
               className="show-poster"
-              src={
-                show.image_url ||
-                "https://via.placeholder.com/350x525?text=No+Image"
-              }
+              src={show.image_url || "https://via.placeholder.com/350x525?text=No+Image"}
               alt={show.title || "No Title"}
             />
           </div>
@@ -127,29 +136,23 @@ const ShowDetails = () => {
               <h1 className="show-title">{show.title || "Untitled"}</h1>
 
               <div className="show-details-meta">
-              <>
-  <span className="text-white">{show.release_date || "TBA"}</span>
-  <span className="text-white"> • </span>
-  <span className="text-white">
-    {show.genres && show.genres.length > 0
-      ? show.genres.map((genre, index) => (
-          <span key={genre.id} className="text-white">
-            {genre.name}
-            {index < show.genres.length - 1 && ", "}
-          </span>
-        ))
-      : ""}
-  </span>
-</>
+                <>
+                  <span>{show.release_date || "TBA"}</span>
+                  <span> • </span>
+                  <span>
+                    {show.genres && show.genres.length > 0
+                      ? show.genres.map((genre, index) => (
+                          <span key={genre.id}>
+                            {genre.name}
+                            {index < show.genres.length - 1 && ", "}
+                          </span>
+                        ))
+                      : ""}
+                  </span>
+                </>
+              </div>
 
-  {show.rating && <span className="show-rating">{show.rating}/10</span>}
-</div>
-
-              
-
-              <p className="show-description">
-                {show.description || "No description available."}
-              </p>
+              <p className="show-description">{show.description || "No description available."}</p>
 
               <div className="show-action-buttons">
                 <button className="btn-play" onClick={openTrailerPopup}>
@@ -157,7 +160,7 @@ const ShowDetails = () => {
                 </button>
                 <button
                   className="btn-watchlist"
-                  onClick={() => addToWatchlist(show.id)}
+                  onClick={() => addToWatchlist(show.id, show.isPremium)}
                 >
                   + Watchlist
                 </button>
@@ -168,16 +171,17 @@ const ShowDetails = () => {
       </div>
 
       {/* Trailer Popup */}
-      {showTrailerPopup && (
+      {showTrailerPopup && show.video_url && (
         <div className="trailer-popup">
           <div className="trailer-popup-content">
             <button className="trailer-close-btn" onClick={closeTrailerPopup}>
               &times;
             </button>
             <iframe
-              src={show.video_url}
+              src={show.video_url.replace("watch?v=", "embed/")}
               title="Trailer"
               className="trailer-popup-iframe"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
           </div>

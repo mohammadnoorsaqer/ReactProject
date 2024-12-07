@@ -137,12 +137,20 @@ const MovieDetails = () => {
             <div className="movie-info">
               <h1 className="movie-title">{movie.title || "Untitled"}</h1>
 
-              <div className="movie-details-meta">
-                <span>{movie.release_date || "TBA"}</span>
-                <span>•</span>
-                <span>{movie.genre || "Unknown Genre"}</span>
-                {movie.rating && <span className="movie-rating">{movie.rating}/10</span>}
-              </div>
+              <>
+  <span>{movie.release_date || "TBA"}</span>
+  <span> • </span>
+  <span>
+    {movie.genres && movie.genres.length > 0
+      ? movie.genres.map((genre, index) => (
+          <span key={genre.id}>
+            {genre.name}
+            {index < movie.genres.length - 1 && ", "}
+          </span>
+        ))
+      : ""}
+  </span>
+</>
 
               <p className="movie-description">{movie.description || "No description available."}</p>
 

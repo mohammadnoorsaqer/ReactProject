@@ -214,7 +214,7 @@ html, body {
 
 /* Navbar Container */
 .navbar {
-  background: linear-gradient(135deg, #0a0a0a, #1a1a1a); /* Sophisticated gradient background */
+  background-color: transparent; /* Sophisticated gradient background */
   display: flex;
   align-items: center;
   justify-content: space-between;
