@@ -1,0 +1,26 @@
+
+body {
+    background-color: #141414;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.card-footer .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+.btn-danger {
+    background-color: #e50914;
+    border-color: #e50914;
+}
+
+.btn-danger:hover {
+    background-color: #f40612;
+    border-color: #f40612;
+}

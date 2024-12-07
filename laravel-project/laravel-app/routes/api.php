@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ShowController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +30,12 @@ Route::middleware(['api'])->group(function () {
 
 
 });
+
+Route::get('/users', [UserController::class, 'index']); // Get all users
+Route::get('/users/{id}', [UserController::class, 'show']);
+Route::put('users/{id}', [UserController::class, 'update']);
+Route::post('/users/{id}/avatar', [UserController::class, 'updateProfilePicture']);
+Route::put('/user/{id}/update-password', [UserController::class, 'changePassword']);
+
+
 
