@@ -50,6 +50,7 @@ const MainSection = () => {
         setLoadingPremium(true);
         const response = await axios.get('http://localhost:8000/api/premium-movies', {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          params: { search: searchTerm } // Add the search term to the API request
         });
         setPremiumMovies(response.data);
         setLoadingPremium(false);
@@ -58,6 +59,7 @@ const MainSection = () => {
         setLoadingPremium(false);
       }
     };
+    
 
     fetchMovies();
     fetchShows();

@@ -1,4 +1,5 @@
 <?php
+
 // app/Http/Controllers/PremiumMoviesController.php
 namespace App\Http\Controllers;
 
@@ -20,9 +21,17 @@ class PremiumMoviesController extends Controller
             return response()->json(['error' => 'Access denied. Premium subscription required.'], 403);
         }
 
-        $movies = PremiumMovie::all();
+        // Get search term from query parameter
+        $search = $request->input('search');
+
+        // Filter PremiumMovies by title (you can add more fields like genre if needed)
+        $movies = PremiumMovie::when($search, function($query, $search) {
+            return $query->where('title', 'like', "%{$search}%");
+        })->get();
+
         return response()->json($movies);
     }
+
     public function show($id, Request $request)
     {
         // Check if the user has an active Premium subscription
