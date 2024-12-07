@@ -32,18 +32,101 @@ img {
   width: 100%;
 }
 
-h3 {
-  font-size: 26px;
-  font-weight: 300;
-}
-
 h4 {
-  color: #00ed82;
+  color: #fff;
   font-size: 13px;
   text-transform: uppercase;
 }
 
-.btn {
+.navbar-header-xyz {
+  background: url(https://hulu-welcome.netlify.app/static/media/hulu-background.947968eed8819a505079.jpg)
+    no-repeat center center / cover;
+  background-color: #000;
+  padding: 20px 40px;
+  position: relative;
+}
+
+.navbar-nav-abc {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  z-index: 2;
+  position: relative;
+}
+
+.navbar-nav-abc ul {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.navbar-logout-btn-qwe,
+.navbar-login-btn-zxc,
+.navbar-profile-btn-asd {
+  background-color: #1f1f1f;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-logout-btn-qwe {
+  color: #fff; /* Set text color to white */
+  border-color: transparent;
+}
+
+.navbar-profile-btn-asd {
+  color: #fff; /* Set text color to white */
+  border-color: transparent;
+}
+
+.navbar-logout-btn-qwe:hover,
+.navbar-profile-btn-asd:hover {
+  background-color: #1db954; /* Hulu green */
+  color: #000; /* Text color changes to black on hover */
+  transform: scale(1.05);
+}
+
+.navbar-logout-btn-qwe:focus,
+.navbar-profile-btn-asd:focus {
+  outline: none;
+}
+
+.navbar-logout-btn-qwe:active,
+.navbar-profile-btn-asd:active {
+  transform: scale(0.98);
+}
+
+.navbar-header-content-pqr {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.navbar-logo-xyz {
+  width: 200px;
+  margin: 20px 0;
+}
+
+.navbar-header-text-1-lmn {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.navbar-header-text-2-ghi {
+  font-size: 18px;
+  margin: 25px 0;
+  color: #fff;
+}
+
+.navbar-btn-cta-vbn {
   display: inline-block;
   background: #fff;
   color: #333;
@@ -57,109 +140,20 @@ h4 {
   letter-spacing: 1px;
   cursor: pointer;
   text-transform: uppercase;
+  text-align: center;
 }
 
-.btn-cta:hover {
+.navbar-btn-cta-vbn:hover {
   opacity: 0.8;
 }
 
-.btn-outline {
-  background: none;
-  color: #fff;
-  border: 2px solid #fff;
-}
-
-.btn-outline:hover {
-  color: #fff;
-  border-color: #ccc;
-}
-
-.btn-dark {
-  color: #fff;
-  background-color: #000;
-}
-
-.legal-text {
+.navbar-legal-text-efg {
   font-size: 10px;
   color: #ccc;
   margin-top: 20px;
 }
 
-.sub-link {
-  display: block;
-  color: #ccc;
-  font-size: 12px;
-  margin-top: 5px;
-  text-decoration: underline;
-}
-
-.text-xl {
-  font-size: 70px;
-  font-weight: bold;
-}
-
-.sub-text {
-  max-width: 850px;
-  margin-bottom: 10px;
-  font-size: 24px;
-}
-
-/* Header */
-
-.header {
-  height: 530px;
-  background: url(https://hulu-welcome.netlify.app/static/media/hulu-background.947968eed8819a505079.jpg)
-    no-repeat center center / cover;
-}
-
-.header nav {
-  display: flex;
-  justify-content: flex-end;
-  padding: 20px 40px;
-  z-index: 2;
-  position: relative;
-}
-
-.header nav ul {
-  display: flex;  /* Align items horizontally */
-  gap: 20px;  /* Add space between the buttons */
-  align-items: center;
-}
-
-.header nav .login-btn {
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: #fff;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.header .header-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: 30px;
-}
-
-.header .logo {
-  width: 270px;
-  margin: 20px 0;
-}
-
-.header .header-text-1 {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.header .header-text-2 {
-  font-size: 18px;
-  margin: 25px 0;
-}
-
-.header::after {
+.navbar-header-xyz::after {
   content: "";
   position: absolute;
   top: 0;
@@ -173,66 +167,4 @@ h4 {
     rgba(0, 0, 0, 0.192) 60.23%,
     rgba(0, 0, 0, 8e-5) 100%
   );
-}
-
-/* Sub Header */
-
-.sub-header {
-  display: grid;
-  grid-template-columns: 2fr 4fr 2fr;
-  gap: 40px;
-  align-items: center;
-  padding: 30px 40px;
-  background: linear-gradient(
-    318.68deg,
-    #0f495c 0%,
-    #0d3640 49.72%,
-    #08141f 100%
-  );
-}
-
-.sub-header > div:last-of-type {
-  justify-self: end;
-  align-self: end;
-}
-
-.sub-header > div:last-of-type .sub-link {
-  text-align: center;
-}
-.logout-btn, .profile-btn {
-  background-color: #1f1f1f;  /* Dark background similar to Hulu's */
-  color: #fff;  /* White text for contrast */
-  font-size: 14px;
-  font-weight: 600;  /* Semi-bold for a strong but not heavy appearance */
-  padding: 12px 20px;
-  border: 2px solid transparent;  /* Border becomes visible on hover */
-  border-radius: 4px;  /* Slightly rounded corners */
-  cursor: pointer;
-  text-transform: uppercase;
-  
-  letter-spacing: 1px;
-  transition: all 0.3s ease;  /* Smooth transition for hover and active states */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);  /* Light shadow to add depth */
-}
-
-.logout-btn:hover, .profile-btn:hover {
-  background-color: #333;  /* Slightly lighter dark shade on hover */
-  border-color: #fff;  /* White border on hover for contrast */
-  transform: scale(1.05);  /* Slightly scale the button on hover */
-}
-
-.logout-btn:focus, .profile-btn:focus {
-  outline: none;  /* Removes default outline on focus */
-}
-
-.logout-btn:active, .profile-btn:active {
-  transform: scale(0.98);  /* Slight shrink effect when clicked */
-}
-
-.logout-btn {
-  background-color: #1f1f1f;  /* Dark background */
-}
-
-.profile-btn {
-  background-color: #00b140;  /* Hulu green color */
 }

@@ -73,6 +73,7 @@ function App() {
     },
     {
       path: "/subscriptions",
+      
       element: <Subscriptions />,
     },
     {
@@ -89,7 +90,10 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return( <AuthProvider> 
+  <RouterProvider router={router} />
+</AuthProvider>
+  );
 }
 
 export default App;

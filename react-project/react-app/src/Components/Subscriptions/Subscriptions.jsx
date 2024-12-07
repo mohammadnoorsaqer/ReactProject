@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import './Subscriptions.css';
 import Navbar from '../NavBar/NavBar';
+import Footer from '../Footer/Footer';
 const Subscriptions = () => {
   const [error, setError] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false); // Track subscription status
@@ -68,14 +69,49 @@ const Subscriptions = () => {
       title: `Confirm ${type} Subscription`,
       html: `
         <div class="payment-form">
-          <input type="text" id="cardName" class="swal2-input" placeholder="Cardholder Name">
-          <input type="text" id="cardNumber" class="swal2-input" placeholder="Card Number">
+          <input 
+            type="text" 
+            id="cardName" 
+            class="swal2-input" 
+            placeholder="Cardholder Name" 
+            value="" 
+            readonly 
+            required>
+          <input 
+            type="text" 
+            id="cardNumber" 
+            class="swal2-input" 
+            placeholder="Card Number" 
+            required>
           <div class="card-details">
-            <input type="text" id="expiry" class="swal2-input" placeholder="MM/YY">
-            <input type="text" id="cvv" class="swal2-input" placeholder="CVV">
+            <input 
+              type="text" 
+              id="expiry" 
+              class="swal2-input" 
+              placeholder="MM/YY" 
+              required>
+            <input 
+              type="text" 
+              id="cvv" 
+              class="swal2-input" 
+              placeholder="CVV" 
+              required>
           </div>
         </div>
       `,
+      didOpen: () => {
+        // Fetch and parse the user data from localStorage
+        const currentUser = localStorage.getItem('currentUser');
+        const cardNameInput = document.getElementById('cardName');
+        
+        if (currentUser) {
+          const userData = JSON.parse(currentUser); // Parse the JSON string into an object
+          cardNameInput.value = userData.name || 'Default Name'; // Use the name property or fallback
+        } else {
+          cardNameInput.value = 'Default Name'; // Fallback if currentUser is not in localStorage
+        }
+      },
+      
       focusConfirm: false,
       preConfirm: () => {
         const cardName = document.getElementById('cardName').value;
@@ -299,6 +335,7 @@ const Subscriptions = () => {
           <button onClick={cancelSubscription}>Cancel Subscription</button>
         </div>
       )}
+      <Footer/>
     </div>
   );
 };

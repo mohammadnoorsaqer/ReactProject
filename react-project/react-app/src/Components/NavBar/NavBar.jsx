@@ -1,54 +1,47 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./NavBar.css";
 import { AuthContext } from "../context/authContext.jsx";
 
 const Navbar = () => {
   const { currentUser, logout } = useContext(AuthContext);
-  const navigate = useNavigate();  // To handle programmatic navigation
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");  // Redirect to login after logout
-  };
 
   return (
-    <header className="header">
-      <nav>
+    <header className="navbar-header-xyz">
+      <nav className="navbar-nav-abc">
         <ul>
           {currentUser ? (
             <>
               {/* Display Logout and Profile buttons if the user is logged in */}
               <li>
-                <button onClick={handleLogout} className="logout-btn">Logout</button>
+                <button onClick={logout} className="navbar-logout-btn-qwe">Logout</button>
               </li>
               <li>
-                <Link to="/profile" className="profile-btn">My Profile</Link>
+                <Link to="/profile" className="navbar-profile-btn-asd">My Profile</Link>
               </li>
             </>
           ) : (
             // Show Log In button if the user is not logged in
             <li>
-              <Link to="/login" className="login-btn">Log In</Link>
+              <Link to="/login" className="navbar-login-btn-zxc">Log In</Link>
             </li>
           )}
         </ul>
       </nav>
-      <div className="header-content">
-        <h4>Try up to one month free</h4>
+      <div className="navbar-header-content-pqr">
         <img
           src="https://github.com/bradtraversy/hulu-webpage-clone/blob/main/img/logo.png?raw=true"
           alt="Logo"
-          className="logo"
+          className="navbar-logo-xyz"
         />
-        <div className="header-text-1">Watch thousands of TV shows and movies.</div>
-        <div className="header-text-2">
+        <div className="navbar-header-text-1-lmn">Watch thousands of TV shows and movies.</div>
+        <div className="navbar-header-text-2-ghi">
           HBO Max™, SHOWTIME®, CINEMAX® and STARZ® available as add-ons.
         </div>
-        <Link to="/subscriptions" className="btn btn-cta">
+        <Link to="/subscriptions" className="navbar-btn-cta-vbn">
           Start Your Free Trial
         </Link>
-        <div className="legal-text">
+        <div className="navbar-legal-text-efg">
           Free trial for new & eligible returning subscribers only.
         </div>
       </div>
