@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Swal from "sweetalert2"; // Import SweetAlert2
+import Swal from "sweetalert2";
 import "./MovieDetails.css";
-
+import Footer from "../Footer/Footer.jsx";
+import Navbar from "../NavBar/NavBar.jsx";
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showTrailerPopup, setShowTrailerPopup] = useState(false);
 
   // Function to add movie to watchlist with SweetAlert
   const addToWatchlist = (movieId) => {
-    const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+    const token = localStorage.getItem("token");
   
     if (!token) {
       Swal.fire({
@@ -29,7 +31,7 @@ const MovieDetails = () => {
         { movie_id: movieId },
         {
           headers: {
-            Authorization: `Bearer ${token}` // Include token in the headers
+            Authorization: `Bearer ${token}`
           }
         }
       )
@@ -48,6 +50,24 @@ const MovieDetails = () => {
           text: 'There was an issue adding the movie to your watchlist. Please try again.',
         });
       });
+  };
+
+  // Open trailer popup
+  const openTrailerPopup = () => {
+    if (movie.video_url) {
+      setShowTrailerPopup(true);
+    } else {
+      Swal.fire({
+        icon: 'info',
+        title: 'No Trailer Available',
+        text: 'Sorry, no trailer is available for this movie.',
+      });
+    }
+  };
+
+  // Close trailer popup
+  const closeTrailerPopup = () => {
+    setShowTrailerPopup(false);
   };
 
   useEffect(() => {
@@ -74,18 +94,6 @@ const MovieDetails = () => {
       });
   }, [id]);
 
-  // Generate a gradient background dynamically
-  const generateDynamicBackground = () => {
-    const colors = [
-      "linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d)",
-      "linear-gradient(135deg, #000428, #004e92)",
-      "linear-gradient(135deg, #3494e6, #ec6ead)",
-      "linear-gradient(135deg, #41295a, #2F0743)",
-      "linear-gradient(135deg, #0F2027, #203A43, #2c5364)",
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
-
   if (loading) {
     return (
       <div className="movie-details-loading">
@@ -105,56 +113,68 @@ const MovieDetails = () => {
 
   return (
     <div className="movie-details-container">
-      <div
+    <Navbar/>
+      <div 
         className="movie-details-header"
         style={{
-          background: movie.background_image
-            ? `url(${movie.background_image})`
-            : generateDynamicBackground(),
+          backgroundImage: `url(${movie.background_image || ''})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <img
-          className="movie-poster"
-          src={movie.image_url || "https://via.placeholder.com/350x525?text=No+Image"}
-          alt={movie.title || "No Title"}
-        />
-        <div className="movie-info">
-          <h1 className="movie-title">{movie.title || "Untitled"}</h1>
-
-          <div className="movie-details-meta">
-            <span>{movie.release_date || "TBA"}</span>
-            <span>•</span>
-            <span>{movie.genre || "Unknown Genre"}</span>
-            {movie.rating && <span className="movie-rating">{movie.rating}/10</span>}
+        <div className="movie-details-content">
+          <div className="movie-poster-container">
+            <img
+              className="movie-poster"
+              src={movie.image_url || "https://via.placeholder.com/350x525?text=No+Image"}
+              alt={movie.title || "No Title"}
+            />
           </div>
+          
+          <div className="movie-info-container">
+            <div className="movie-info">
+              <h1 className="movie-title">{movie.title || "Untitled"}</h1>
 
-          <p className="movie-description">{movie.description || "No description available."}</p>
+              <div className="movie-details-meta">
+                <span>{movie.release_date || "TBA"}</span>
+                <span>•</span>
+                <span>{movie.genre || "Unknown Genre"}</span>
+                {movie.rating && <span className="movie-rating">{movie.rating}/10</span>}
+              </div>
 
-          <div className="movie-action-buttons">
-            <button className="btn-play">
-              <i className="play-icon">▶</i> Play
-            </button>
-            <button className="btn-more-info">More Info</button>
-            <button className="btn-watchlist" onClick={() => addToWatchlist(movie.id)}>
-              + Watchlist
-            </button>
+              <p className="movie-description">{movie.description || "No description available."}</p>
+
+              <div className="movie-action-buttons">
+                <button className="btn-play" onClick={openTrailerPopup}>
+                  <i className="play-icon">▶</i> Play
+                </button>
+                <button className="btn-watchlist" onClick={() => addToWatchlist(movie.id)}>
+                  + Watchlist
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {movie.video_url && (
-        <div className="movie-video-section" style={{ marginBottom: "50px" }}>
-          <iframe
-            src={movie.video_url.replace("watch?v=", "embed/")}
-            title="Trailer"
-            className="movie-trailer"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+      {/* Trailer Popup */}
+      {showTrailerPopup && movie.video_url && (
+        <div className="trailer-popup">
+          <div className="trailer-popup-content">
+            <button className="trailer-close-btn" onClick={closeTrailerPopup}>
+              &times;
+            </button>
+            <iframe
+              src={movie.video_url.replace("watch?v=", "embed/")}
+              title="Trailer"
+              className="trailer-popup-iframe"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       )}
+<Footer/>
     </div>
   );
 };

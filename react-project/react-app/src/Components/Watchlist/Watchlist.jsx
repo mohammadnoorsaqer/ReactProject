@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import Footer from "../Footer/Footer";
+import Navbar from "../NavBar/NavBar";
 
 const Watchlist = () => {
   const [watchlist, setWatchlist] = useState([]);
@@ -72,6 +74,7 @@ const Watchlist = () => {
   };
 
   return (
+   
     <div style={{
       backgroundColor: '#121212',
       color: '#00ff41',
@@ -188,6 +191,7 @@ const Watchlist = () => {
           <p>INITIATE MOVIE ACQUISITION</p>
         </div>
       )}
+      <Footer/>
     </div>
   );
 };
