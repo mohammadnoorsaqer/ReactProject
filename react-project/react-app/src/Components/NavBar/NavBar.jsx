@@ -8,49 +8,53 @@ const Navbar = () => {
 
   return (
     <header className="navbar-header-xyz">
-      <nav className="navbar-nav-abc">
-        <ul>
-          {/* Left Side Links */}
-          <li>
-            <Link to="/" className="navbar-home-btn">Home</Link>
-          </li>
-          <li>
-            <Link to="/watchlist" className="navbar-watchlist-btn">Watchlist</Link>
-          </li>
-          
-          {/* Right Side Buttons (only show logout/profile if logged in) */}
-          {currentUser ? (
-            <>
-              <li>
-                <button 
-                  onClick={logout} 
-                  className="navbar-logout-btn-qwe"
-                  aria-label="Logout"
-                >
-                  Logout
-                </button>
-              </li>
-              <li>
-                <Link 
-                  to="/profile" 
-                  className="navbar-profile-btn-asd"
-                >
-                  My Profile
-                </Link>
-              </li>
-            </>
-          ) : (
-            <li>
-              <Link 
-                to="/login" 
-                className="navbar-login-btn-zxc"
-              >
-                Log In
-              </Link>
-            </li>
-          )}
-        </ul>
-      </nav>
+  <nav className="navbar">
+  <ul className="navbar-links">
+    {/* Left Side Links */}
+    <li>
+      <Link to="/" className="navbar-link">Home</Link>
+    </li>
+    <li>
+      <Link to="/watchlist" className="navbar-link">Watchlist</Link>
+    </li>
+    <li>
+          <Link 
+            to="/profile" 
+            className="navbar-link profile-link"
+          >
+            My Profile
+          </Link>
+        </li>
+    
+    {/* Right Side Buttons (only show logout/profile if logged in) */}
+    {currentUser ? (
+      <>
+      <li className="logout-item">
+  <button 
+    onClick={logout} 
+    className="navbar-button logout-button"
+    aria-label="Logout"
+  >
+    Logout
+  </button>
+</li>
+
+
+      
+      </>
+    ) : (
+      <li>
+        <Link 
+          to="/login" 
+          className="navbar-link login-link"
+        >
+          Log In
+        </Link>
+      </li>
+    )}
+  </ul>
+</nav>
+
 
       <div className="navbar-header-content-pqr">
         <img

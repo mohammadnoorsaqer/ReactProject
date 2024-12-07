@@ -22,12 +22,16 @@ class MovieController extends Controller
 
     public function show($id)
     {
-        // Return a specific movie by id
-        $movie = Movie::find($id);
+        // Fetch the movie along with its genres using eager loading
+        $movie = Movie::with('genres')->find($id);
+    
+        // Check if the movie exists
         if ($movie) {
             return response()->json($movie);
         } else {
             return response()->json(['error' => 'Movie not found'], 404);
         }
     }
+    
+    
 }

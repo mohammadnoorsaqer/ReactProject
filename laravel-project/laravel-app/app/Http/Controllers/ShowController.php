@@ -22,12 +22,14 @@ class ShowController extends Controller
 
     public function show($id)
     {
-        // Return a specific show by id
-        $show = Show::find($id);
+        $show = Show::with('genres')->find($id); // Make sure 'genres' is the correct relationship
         if ($show) {
             return response()->json($show);
         } else {
             return response()->json(['error' => 'Show not found'], 404);
         }
     }
+    
+    
+    
 }

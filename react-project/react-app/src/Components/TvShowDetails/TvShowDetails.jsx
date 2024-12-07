@@ -114,7 +114,10 @@ const ShowDetails = () => {
           <div className="show-poster-container">
             <img
               className="show-poster"
-              src={show.image_url || "https://via.placeholder.com/350x525?text=No+Image"}
+              src={
+                show.image_url ||
+                "https://via.placeholder.com/350x525?text=No+Image"
+              }
               alt={show.title || "No Title"}
             />
           </div>
@@ -124,19 +127,38 @@ const ShowDetails = () => {
               <h1 className="show-title">{show.title || "Untitled"}</h1>
 
               <div className="show-details-meta">
-                <span>{show.release_date || "TBA"}</span>
-                <span>•</span>
-                <span>{show.genre || "Unknown Genre"}</span>
-                {show.rating && <span className="show-rating">{show.rating}/10</span>}
-              </div>
+              <>
+  <span className="text-white">{show.release_date || "TBA"}</span>
+  <span className="text-white"> • </span>
+  <span className="text-white">
+    {show.genres && show.genres.length > 0
+      ? show.genres.map((genre, index) => (
+          <span key={genre.id} className="text-white">
+            {genre.name}
+            {index < show.genres.length - 1 && ", "}
+          </span>
+        ))
+      : ""}
+  </span>
+</>
 
-              <p className="show-description">{show.description || "No description available."}</p>
+  {show.rating && <span className="show-rating">{show.rating}/10</span>}
+</div>
+
+              
+
+              <p className="show-description">
+                {show.description || "No description available."}
+              </p>
 
               <div className="show-action-buttons">
                 <button className="btn-play" onClick={openTrailerPopup}>
                   <i className="play-icon">▶</i> Play
                 </button>
-                <button className="btn-watchlist" onClick={() => addToWatchlist(show.id)}>
+                <button
+                  className="btn-watchlist"
+                  onClick={() => addToWatchlist(show.id)}
+                >
                   + Watchlist
                 </button>
               </div>
