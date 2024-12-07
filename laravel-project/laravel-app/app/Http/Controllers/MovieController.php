@@ -7,10 +7,17 @@ use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Return all movies
-        return response()->json(Movie::all());
+        // Get search term from query parameter
+        $search = $request->input('search');
+
+        // Filter movies by title (you can add more fields like genre if needed)
+        $movies = Movie::when($search, function($query, $search) {
+            return $query->where('title', 'like', "%{$search}%");
+        })->get();
+
+        return response()->json($movies);
     }
 
     public function show($id)
