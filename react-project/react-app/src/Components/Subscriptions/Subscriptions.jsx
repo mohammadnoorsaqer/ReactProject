@@ -7,11 +7,13 @@ const Subscriptions = () => {
   const [error, setError] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false); // Track subscription status
   const [subscriptionType, setSubscriptionType] = useState('');
+  
+  // Retrieve token from localStorage
+  const token = localStorage.getItem('token'); // Assuming the token is stored with the key 'token'
 
   // Fetch subscription status when the component mounts
   useEffect(() => {
     const fetchSubscriptionStatus = async () => {
-      // Check if the subscription is stored in localStorage
       const storedIsSubscribed = localStorage.getItem('isSubscribed');
       const storedSubscriptionType = localStorage.getItem('subscriptionType');
       
@@ -20,7 +22,12 @@ const Subscriptions = () => {
         setSubscriptionType(storedSubscriptionType);
       } else {
         try {
-          const response = await axios.get('http://127.0.0.1:8000/api/check-subscription');
+          const response = await axios.get('http://127.0.0.1:8000/api/check-subscription', {
+            headers: {
+              'Authorization': `Bearer ${token}`, // Include token in the request headers
+            }
+          });
+
           if (response.data.isSubscribed) {
             setIsSubscribed(true);
             setSubscriptionType(response.data.subscriptionType);
@@ -34,7 +41,7 @@ const Subscriptions = () => {
     };
 
     fetchSubscriptionStatus();
-  }, []);
+  }, [token]);
 
   // Subscribe to a plan
   const bookSubscription = async (type, price) => {
@@ -110,6 +117,7 @@ const Subscriptions = () => {
             {
               headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`, // Include token in the request headers
               },
             }
           );
@@ -158,6 +166,7 @@ const Subscriptions = () => {
           {
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`, // Include token in the request headers
             },
           }
         );
@@ -243,50 +252,35 @@ const Subscriptions = () => {
               <li>✓ Basic Customer Support</li>
               <li>✗ 4K Content</li>
               <li>✗ Exclusive Originals</li>
-              <li>✗ Offline Downloads</li>
             </ul>
           </div>
-          <button 
-            className={`btn ${isSubscribed && subscriptionType === 'Basic' ? 'disabled' : ''}`}
-            onClick={() => bookSubscription('Basic', 9.99)}
-            disabled={isSubscribed && subscriptionType === 'Basic'}
-          >
-            {isSubscribed && subscriptionType === 'Basic' ? 'Already Subscribed' : 'Subscribe Now'}
-          </button>
+          <button onClick={() => bookSubscription('Basic', 9.99)}>Subscribe</button>
         </div>
-        
-        <div className="subscription-card premium">
+        <div className="subscription-card standard">
           <div className="plan-header">
-            <h2>Premium</h2>
-            <span className="price">$19.99 / month</span>
+            <h2>Standard</h2>
+            <span className="price">$15.99 / month</span>
           </div>
           <div className="plan-features">
             <ul>
               <li>✓ No Ads</li>
-              <li>✓ 4K Streaming</li>
+              <li>✓ HD Streaming (1080p)</li>
               <li>✓ Full Catalog Access</li>
               <li>✓ 4 Simultaneous Streams</li>
+              <li>✓ Premium Content</li>
+              <li>✓ 24/7 Customer Support</li>
+              <li>✓ 4K Content</li>
               <li>✓ Exclusive Originals</li>
-              <li>✓ Offline Downloads</li>
-              <li>✓ Priority Customer Support</li>
             </ul>
           </div>
-          <button
-            className={`btn ${isSubscribed && subscriptionType === 'Premium' ? 'disabled' : ''}`}
-            onClick={() => bookSubscription('Premium', 19.99)}
-            disabled={isSubscribed && subscriptionType === 'Premium'}
-          >
-            {isSubscribed && subscriptionType === 'Premium' ? 'Already Subscribed' : 'Subscribe Now'}
-          </button>
+          <button onClick={() => bookSubscription('Standard', 15.99)}>Subscribe</button>
         </div>
       </div>
 
       {isSubscribed && (
         <div className="subscription-status">
           <p>You are currently subscribed to the {subscriptionType} plan.</p>
-          <button className="cancel-btn" onClick={cancelSubscription}>
-            Cancel Subscription
-          </button>
+          <button onClick={cancelSubscription}>Cancel Subscription</button>
         </div>
       )}
     </div>
