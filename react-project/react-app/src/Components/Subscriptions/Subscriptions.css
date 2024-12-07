@@ -1,0 +1,154 @@
+body {
+    background-color: #0a1118;
+    color: #fff;
+    font-family: 'Graphik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  .subscriptions-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .subscriptions-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .subscriptions-header h1 {
+    color: #1ce783;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subscriptions-header p {
+    color: #a9a9a9;
+    font-size: 1rem;
+  }
+  
+  .subscription-plans {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .subscription-card {
+    background-color: #161e29;
+    border-radius: 10px;
+    width: 350px;
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+  
+  .subscription-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .plan-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .plan-header h2 {
+    color: #1ce783;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .plan-header .price {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .plan-features ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .plan-features li {
+    margin-bottom: 0.75rem;
+    color: #a9a9a9;
+  }
+  
+  .plan-features li:before {
+    margin-right: 0.5rem;
+  }
+  
+  .btn {
+    padding: 1rem;
+    background-color: #1ce783;
+    color: #0a1118;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  
+  .btn:hover {
+    opacity: 0.9;
+  }
+  
+  .btn.disabled {
+    background-color: #333;
+    color: #a9a9a9;
+    cursor: not-allowed;
+  }
+  
+  .subscription-status {
+    text-align: center;
+    background-color: #161e29;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+  }
+  
+  .cancel-btn {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #e83f33;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  
+  .cancel-btn:hover {
+    opacity: 0.9;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .subscription-plans {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .subscription-card {
+      width: 90%;
+      max-width: 350px;
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  /* SweetAlert2 Custom Styles */
+  .swal2-popup {
+    background-color: #0a1118 !important;
+  }
+  
+  .swal2-input {
+    background-color: #161e29 !important;
+    color: #fff !important;
+    border: 1px solid #333 !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .swal2-input::placeholder {
+    color: #a9a9a9 !important;
+  }

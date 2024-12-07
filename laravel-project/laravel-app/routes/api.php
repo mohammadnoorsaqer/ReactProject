@@ -1,16 +1,14 @@
 <?php
-
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ShowController;
-use App\Http\Controllers\UserController;
-
 
 /*
-|--------------------------------------------------------------------------
+|---------------------------------------------------------------------------
 | API Routes
-|--------------------------------------------------------------------------
+|---------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
@@ -18,9 +16,15 @@ use App\Http\Controllers\UserController;
 |
 */
 
+Route::get('/register', [RegisteredUserController::class, 'create']);  // Show registration form
+Route::post('/register', [RegisteredUserController::class, 'store']);   // Handle registration form submission
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::middleware(['api'])->group(function () {
     Route::get('/movies', [MovieController::class, 'index']);
     Route::get('/movies/{id}', [MovieController::class, 'show']);
@@ -30,12 +34,4 @@ Route::middleware(['api'])->group(function () {
 
 
 });
-
-Route::get('/users', [UserController::class, 'index']); // Get all users
-Route::get('/users/{id}', [UserController::class, 'show']);
-Route::put('users/{id}', [UserController::class, 'update']);
-Route::post('/users/{id}/avatar', [UserController::class, 'updateProfilePicture']);
-Route::put('/user/{id}/update-password', [UserController::class, 'changePassword']);
-
-
 

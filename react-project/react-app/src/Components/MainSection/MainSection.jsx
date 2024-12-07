@@ -1,47 +1,56 @@
 import "./MainSection.css";
+import './SearchBar.css'; // New search bar styles
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
 
 const MainSection = () => {
   const [movies, setMovies] = useState([]);
-  const [shows, setShows] = useState([]);  // New state for TV shows
+  const [shows, setShows] = useState([]);
   const [loadingMovies, setLoadingMovies] = useState(true);
   const [loadingShows, setLoadingShows] = useState(true);
-  const [errorMovies, setErrorMovies] = useState(null); // Error state for movies
-  const [errorShows, setErrorShows] = useState(null); // Error state for shows
-  const [selectedCategory, setSelectedCategory] = useState('movies'); // Track selected category
+  const [errorMovies, setErrorMovies] = useState(null);
+  const [errorShows, setErrorShows] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('movies');
+  const [searchTerm, setSearchTerm] = useState(''); // State to store the search term
 
   useEffect(() => {
-    // Fetch movies data from the Laravel API
-    axios.get('http://localhost:8000/api/movies')
-      .then(response => {
+    // Fetch movies data from the Laravel API with optional search term
+    const fetchMovies = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/movies', {
+          params: { search: searchTerm } // Send the search term as a query parameter
+        });
         setMovies(response.data);
         setLoadingMovies(false);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the movies!', error);
+      } catch (error) {
         setErrorMovies(error.response?.data?.error || 'Failed to fetch movies');
         setLoadingMovies(false);
-      });
+      }
+    };
 
-    // Fetch TV shows data from the Laravel API
-    axios.get('http://localhost:8000/api/shows')
-      .then(response => {
+    // Fetch TV shows data from the Laravel API with optional search term
+    const fetchShows = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/shows', {
+          params: { search: searchTerm } // Send the search term as a query parameter
+        });
         setShows(response.data);
         setLoadingShows(false);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the shows!', error);
+      } catch (error) {
         setErrorShows(error.response?.data?.error || 'Failed to fetch TV shows');
         setLoadingShows(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchMovies(); // Fetch movies whenever the search term changes
+    fetchShows(); // Fetch shows whenever the search term changes
+  }, [searchTerm]); // Trigger useEffect when the search term changes
 
   const renderCover = (item, isMovie = true) => {
     const imageUrl = item.image_url
-      ? `${item.image_url}` // Directly access image from /public/images/
-      : 'https://via.placeholder.com/500x750?text=No+Image'; // Placeholder image
+      ? `${item.image_url}` 
+      : 'https://via.placeholder.com/500x750?text=No+Image';
 
     return (
       <div key={item.id} className="cover-item">
@@ -72,9 +81,12 @@ const MainSection = () => {
     setSelectedCategory(category);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value); // Update the search term
+  };
+
   return (
     <main className="main-content">
-      {/* Categories Section */}
       <section className="categories">
         <div className="category-buttons">
           <button 
@@ -91,8 +103,16 @@ const MainSection = () => {
           </button>
         </div>
 
+        <div className="search-bar">
+          <input 
+            type="text" 
+            placeholder="Search movies and TV shows..."
+            value={searchTerm}
+            onChange={handleSearchChange} // Handle search input change
+          />
+        </div>
+
         <div className="content-wrapper">
-          {/* Conditional Rendering Based on Selected Category */}
           {selectedCategory === 'movies' ? (
             <div className="content-section">
               <h3>Movies</h3>

@@ -1,247 +1,137 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import './MovieDetails.css';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import "./MovieDetails.css";
 
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
-  const [trailer, setTrailer] = useState(null);
-  const [showTrailer, setShowTrailer] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const imageBaseUrl = 'https://image.tmdb.org/t/p/original';
 
+  // Function to add movie to watchlist
+  const addToWatchlist = (movieId) => {
+    const token = localStorage.getItem("auth_token"); // Assuming you store the token in localStorage
+  
+    if (!token) {
+      alert("Please login to add movies to your watchlist.");
+      return;
+    }
+  
+    axios
+      .post(
+        'http://localhost:8000/api/watchlist', 
+        { movie_id: movieId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}` // Include token in the headers
+          }
+        }
+      )
+      .then((response) => {
+        alert("Added to Watchlist!");
+      })
+      .catch((error) => {
+        console.error("Error adding to watchlist:", error);
+        alert("Failed to add to watchlist.");
+      });
+  };
+  
   useEffect(() => {
-    const fetchMovieDetails = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/api/movies/${id}`);
-        setMovie(response.data.movie);
-        setTrailer(response.data.trailer); // Assuming API returns trailer key in `response.data.trailer`
+    axios
+      .get(`http://localhost:8000/api/movies/${id}`)
+      .then((response) => {
+        setMovie(response.data);
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching movie details:', error);
-        setError('Failed to fetch movie details');
+      })
+      .catch((error) => {
+        console.error("Error fetching movie details:", error);
+        setError(error.response?.data?.error || "Failed to load movie details.");
         setLoading(false);
-      }
-    };
-
-    fetchMovieDetails();
+      });
   }, [id]);
+
+  // Generate a gradient background dynamically
+  const generateDynamicBackground = () => {
+    const colors = [
+      "linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d)",
+      "linear-gradient(135deg, #000428, #004e92)",
+      "linear-gradient(135deg, #3494e6, #ec6ead)",
+      "linear-gradient(135deg, #41295a, #2F0743)",
+      "linear-gradient(135deg, #0F2027, #203A43, #2c5364)",
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
 
   if (loading) {
     return (
-      <div className="movie-details-container">
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh',
-            color: 'white',
-          }}
-        >
-          Loading...
-        </div>
+      <div className="movie-details-loading">
+        <div className="spinner"></div>
+        <p>Loading movie details...</p>
       </div>
     );
   }
 
   if (error) {
-    return (
-      <div className="movie-details-container">
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh',
-            color: 'red',
-          }}
-        >
-          {error}
-        </div>
-      </div>
-    );
+    return <div className="movie-details-error">Error: {error}</div>;
   }
 
   if (!movie) {
-    return (
-      <div className="movie-details-container">
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh',
-            color: 'white',
-          }}
-        >
-          No movie details available.
-        </div>
-      </div>
-    );
+    return <div className="movie-details-error">No movie found.</div>;
   }
-
-  // Trailer Modal Component
-  const TrailerModal = () => {
-    if (!trailer) return null;
-
-    return (
-      <div className="trailer-modal">
-        <div className="trailer-modal-content">
-          <button
-            className="trailer-close-btn"
-            onClick={() => setShowTrailer(false)}
-          >
-            ×
-          </button>
-          <iframe
-            width="100%"
-            height="500"
-            src={`https://www.youtube.com/embed/${trailer.key}`}
-            title="Movie Trailer"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="movie-details-container">
-      {/* Add trailer modal styles */}
-      <style>
-        {`
-          .trailer-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-          }
-
-          .trailer-modal-content {
-            position: relative;
-            width: 80%;
-            max-width: 1000px;
-            background: #000;
-            padding: 20px;
-            border-radius: 10px;
-          }
-
-          .trailer-close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: red;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-          }
-        `}
-      </style>
-
-      {/* Movie Background */}
       <div
-        className="movie-background"
+        className="movie-details-header"
         style={{
-          backgroundImage: `url(${imageBaseUrl}${movie.backdrop_path})`,
+          background: movie.background_image
+            ? `url(${movie.background_image})`
+            : generateDynamicBackground(),
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
-      />
+      >
+        <img
+          className="movie-poster"
+          src={movie.image_url || "https://via.placeholder.com/350x525?text=No+Image"}
+          alt={movie.title || "No Title"}
+        />
+        <div className="movie-info">
+          <h1 className="movie-title">{movie.title || "Untitled"}</h1>
 
-      <div className="movie-details-wrapper">
-        {/* Poster Section */}
-        <div className="movie-poster-section">
-          <img
-            src={
-              movie.poster_path
-                ? `${imageBaseUrl}${movie.poster_path}`
-                : 'https://via.placeholder.com/500x750?text=No+Image'
-            }
-            alt={movie.title}
-            className="movie-poster"
-          />
+          <div className="movie-details-meta">
+            <span>{movie.release_date || "TBA"}</span>
+            <span>•</span>
+            <span>{movie.genre || "Unknown Genre"}</span>
+            {movie.rating && <span className="movie-rating">{movie.rating}/10</span>}
+          </div>
 
-          <div className="movie-actions">
-            <button
-              className="btn btn-watch"
-              onClick={() => setShowTrailer(true)}
-              style={{ display: trailer ? 'block' : 'none' }}
-            >
-              ▶ Watch Trailer
+          <p className="movie-description">{movie.description || "No description available."}</p>
+
+          <div className="movie-action-buttons">
+            <button className="btn-play">
+              <i className="play-icon">▶</i> Play
             </button>
-            <button className="btn btn-watchlist">+ Add to Watchlist</button>
-          </div>
-        </div>
-
-        {/* Movie Details Content */}
-        <div className="movie-details-content">
-          <h1 className="movie-title">{movie.title}</h1>
-
-          <div className="movie-meta">
-            <div className="movie-meta-item">★ {movie.vote_average.toFixed(1)}/10</div>
-            <div className="movie-meta-item">🕒 {movie.runtime} mins</div>
-            <div className="movie-meta-item">📅 {movie.release_date}</div>
-          </div>
-
-          <div className="movie-overview">
-            <h2 className="movie-overview-title">Overview</h2>
-            <p>{movie.overview}</p>
-          </div>
-
-          <div className="movie-genres">
-            {movie.genres.map((genre) => (
-              <span key={genre.id} className="genre-tag">
-                {genre.name}
-              </span>
-            ))}
-          </div>
-
-          <div className="movie-additional-info">
-            <div className="additional-info-section">
-              <h3 className="additional-info-title">Production</h3>
-              <ul>
-                {movie.production_companies.slice(0, 3).map((company) => (
-                  <li key={company.id}>{company.name}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="additional-info-section">
-              <h3 className="additional-info-title">Details</h3>
-              <ul>
-                <li>
-                  <strong>Original Title:</strong> {movie.original_title}
-                </li>
-                <li>
-                  <strong>Language:</strong> {movie.original_language.toUpperCase()}
-                </li>
-                <li>
-                  <strong>Status:</strong> {movie.status}
-                </li>
-              </ul>
-            </div>
+            <button className="btn-more-info">More Info</button>
+            <button className="btn-watchlist" onClick={() => addToWatchlist(movie.id)}>
+              + Watchlist
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Trailer Modal */}
-      {showTrailer && <TrailerModal />}
+      {movie.video_url && (
+        <div className="movie-video-section" style={{ marginBottom: "50px" }}>
+          <iframe
+            src={movie.video_url.replace("watch?v=", "embed/")}
+            title="Trailer"
+            className="movie-trailer"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      )}
     </div>
   );
 };
