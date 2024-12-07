@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import "./MovieDetails.css";
 import Footer from "../Footer/Footer.jsx";
 import Navbar from "../NavBar/NavBar.jsx";
+
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
@@ -13,41 +14,40 @@ const MovieDetails = () => {
   const [showTrailerPopup, setShowTrailerPopup] = useState(false);
 
   // Function to add movie to watchlist with SweetAlert
-  const addToWatchlist = (movieId) => {
+  const addToWatchlist = (movieId, isPremium = false) => {
     const token = localStorage.getItem("token");
-  
+
     if (!token) {
       Swal.fire({
-        icon: 'warning',
-        title: 'Login Required',
-        text: 'Please login to add movies to your watchlist.',
+        icon: "warning",
+        title: "Login Required",
+        text: "Please login to add movies to your watchlist.",
       });
       return;
     }
-  
+
+    // Adjust the data to send the right movie type (regular or premium)
+    const data = isPremium ? { premium_movie_id: movieId } : { movie_id: movieId };
+
     axios
-      .post(
-        'http://localhost:8000/api/watchlist', 
-        { movie_id: movieId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      .post("http://localhost:8000/api/watchlist", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         Swal.fire({
-          icon: 'success',
-          title: 'Added to Watchlist!',
+          icon: "success",
+          title: "Added to Watchlist!",
           text: `${movie.title} has been added to your watchlist.`,
         });
       })
       .catch((error) => {
         console.error("Error adding to watchlist:", error);
         Swal.fire({
-          icon: 'error',
-          title: 'Failed to add',
-          text: 'There was an issue adding the movie to your watchlist. Please try again.',
+          icon: "error",
+          title: "Failed to add",
+          text: "There was an issue adding the movie to your watchlist. Please try again.",
         });
       });
   };
@@ -58,9 +58,9 @@ const MovieDetails = () => {
       setShowTrailerPopup(true);
     } else {
       Swal.fire({
-        icon: 'info',
-        title: 'No Trailer Available',
-        text: 'Sorry, no trailer is available for this movie.',
+        icon: "info",
+        title: "No Trailer Available",
+        text: "Sorry, no trailer is available for this movie.",
       });
     }
   };
@@ -71,7 +71,7 @@ const MovieDetails = () => {
   };
 
   useEffect(() => {
-    // Fetching the regular movie details first
+    // Fetching regular movie details first
     axios
       .get(`http://localhost:8000/api/movies/${id}`)
       .then((response) => {
@@ -85,6 +85,8 @@ const MovieDetails = () => {
           .then((response) => {
             setMovie(response.data);
             setLoading(false);
+            // Flag this movie as premium if it's found in the premium-movies endpoint
+            setMovie((prevMovie) => ({ ...prevMovie, isPremium: true }));
           })
           .catch((error) => {
             console.error("Error fetching movie details:", error);
@@ -113,11 +115,11 @@ const MovieDetails = () => {
 
   return (
     <div className="movie-details-container">
-    <Navbar/>
-      <div 
+      <Navbar />
+      <div
         className="movie-details-header"
         style={{
-          backgroundImage: `url(${movie.background_image || ''})`,
+          backgroundImage: `url(${movie.background_image || ""})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -130,7 +132,7 @@ const MovieDetails = () => {
               alt={movie.title || "No Title"}
             />
           </div>
-          
+
           <div className="movie-info-container">
             <div className="movie-info">
               <h1 className="movie-title">{movie.title || "Untitled"}</h1>
@@ -148,7 +150,7 @@ const MovieDetails = () => {
                 <button className="btn-play" onClick={openTrailerPopup}>
                   <i className="play-icon">▶</i> Play
                 </button>
-                <button className="btn-watchlist" onClick={() => addToWatchlist(movie.id)}>
+                <button className="btn-watchlist" onClick={() => addToWatchlist(movie.id, movie.isPremium)}>
                   + Watchlist
                 </button>
               </div>
@@ -174,7 +176,7 @@ const MovieDetails = () => {
           </div>
         </div>
       )}
-<Footer/>
+      <Footer />
     </div>
   );
 };

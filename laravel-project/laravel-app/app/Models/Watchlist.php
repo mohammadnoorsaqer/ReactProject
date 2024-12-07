@@ -9,7 +9,7 @@ class Watchlist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'movie_id', 'show_id'];
+    protected $fillable = ['user_id', 'movie_id', 'show_id','premium_movie_id'];
 
     // Relationships
     public function user()
@@ -25,5 +25,9 @@ class Watchlist extends Model
     public function show()
     {
         return $this->belongsTo(Show::class);
+    }
+    public function premium_movie()
+    {
+        return $this->belongsTo(PremiumMovie::class, 'premium_movie_id');
     }
 }

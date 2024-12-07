@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('movie_id')->nullable()->constrained('movies')->nullOnDelete();
             $table->foreignId('show_id')->nullable()->constrained('shows')->nullOnDelete();
+            $table->foreignId('premium_movie_id')->nullable()->constrained('premium_movies')->nullOnDelete();  // Add foreign key for premium movies
+
             $table->timestamps();
         });
     }

@@ -39,6 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/watchlist', [WatchlistController::class, 'getWatchlist']);
     Route::delete('watchlist/{movieId}', [WatchlistController::class, 'destroy']);
     Route::delete('watchlist/{showId}', [WatchlistController::class, 'destroy']); 
+    Route::delete('/watchlist/premium/{id}', [WatchlistController::class, 'destroy']);
+
+
 
 
 });
