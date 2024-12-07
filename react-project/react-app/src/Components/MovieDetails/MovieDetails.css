@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
+/* General Styles */
 :root {
     --hulu-black: #141414;
     --hulu-dark-gray: #181818;
@@ -8,40 +7,44 @@
     --text-primary: #FFFFFF;
     --text-secondary: #B3B3B3;
     --highlight-green: #1CE783;
-}
-
-* {
+    --btn-hover-color: #17c972;
+    --btn-shadow: rgba(0, 0, 0, 0.6);
+  }
+  
+  * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
+  }
+  
+  body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--hulu-black);
     color: var(--text-primary);
     line-height: 1.5;
     scroll-behavior: smooth;
-}
-
-.movie-details-container {
+  }
+  
+  /* Movie Details Container */
+  .movie-details-container {
     max-width: 1920px;
     margin: 0 auto;
     background-color: var(--hulu-black);
-}
-
-/* Hero Section with Background */
-.movie-details-header {
+  }
+  
+  /* Hero Section with Background */
+  .movie-details-header {
     position: relative;
     height: 100vh;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 0 5%;
-    overflow: hidden;
     background: linear-gradient(to bottom, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.9));
-}
-
-.movie-details-header::before {
+    overflow: hidden;
+  }
+  
+  .movie-details-header::before {
     content: '';
     position: absolute;
     top: 0;
@@ -52,9 +55,9 @@ body {
     background-position: center;
     filter: brightness(0.3) blur(4px);
     z-index: 1;
-}
-
-.movie-poster {
+  }
+  
+  .movie-poster {
     width: 350px;
     height: 525px;
     object-fit: cover;
@@ -63,64 +66,66 @@ body {
     z-index: 2;
     position: relative;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.movie-poster:hover {
+  }
+  
+  .movie-poster:hover {
     transform: scale(1.08) rotate(-1deg);
-}
-
-.movie-info {
+  }
+  
+  .movie-info {
     margin-left: 5%;
     z-index: 2;
     position: relative;
     max-width: 600px;
     color: var(--text-primary);
-}
-
-.movie-title {
+  }
+  
+  .movie-title {
     font-size: 3.8rem;
     font-weight: 700;
     margin-bottom: 20px;
     color: var(--highlight-green);
     line-height: 1.2;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-}
-
-.movie-details-meta {
+  }
+  
+  .movie-details-meta {
     display: flex;
     align-items: center;
     gap: 15px;
     margin-bottom: 25px;
     flex-wrap: wrap;
-}
-
-.movie-details-meta span {
+  }
+  
+  .movie-details-meta span {
     color: var(--text-secondary);
     font-weight: 300;
-}
-
-.movie-details-meta .movie-rating {
+  }
+  
+  .movie-details-meta .movie-rating {
     color: var(--highlight-green);
     font-weight: 700;
-}
-
-.movie-description {
+  }
+  
+  .movie-description {
     font-size: 1.2rem;
     color: var(--text-secondary);
     margin-bottom: 30px;
     line-height: 1.8;
     letter-spacing: 0.5px;
-}
-
-/* Action Buttons */
-.movie-action-buttons {
+  }
+  
+  /* Action Buttons */
+  .movie-action-buttons {
     display: flex;
     gap: 20px;
     margin-top: 30px;
     flex-wrap: wrap;
-}
-
-.btn-play, .btn-more-info, .btn-watchlist {
+  }
+  
+  .btn-play,
+  .btn-more-info,
+  .btn-watchlist {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -132,89 +137,64 @@ body {
     transition: transform 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
     border: none;
-}
-
-.btn-play {
+  }
+  
+  .btn-play {
     background-color: var(--hulu-green);
     color: var(--hulu-black);
     box-shadow: 0 5px 20px rgba(28, 231, 131, 0.5);
-}
-
-.btn-play:hover {
+  }
+  
+  .btn-play:hover {
     transform: scale(1.05);
-    background-color: #17c972;
-}
-
-.btn-more-info {
+    background-color: var(--btn-hover-color);
+  }
+  
+  .btn-more-info {
     background-color: var(--hulu-gray);
     color: var(--text-primary);
     box-shadow: 0 5px 15px rgba(50, 50, 50, 0.5);
-}
-
-.btn-more-info:hover {
+  }
+  
+  .btn-more-info:hover {
     transform: scale(1.05);
     background-color: var(--text-secondary);
-}
-
-.btn-watchlist {
+  }
+  
+  .btn-watchlist {
     background-color: var(--hulu-black);
     color: var(--highlight-green);
     border: 2px solid var(--highlight-green);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-}
-
-.btn-watchlist:hover {
+  }
+  
+  .btn-watchlist:hover {
     transform: scale(1.05);
     background-color: var(--highlight-green);
     color: var(--hulu-black);
-}
-
-/* Video Section */
-.movie-video-section {
+  }
+  
+  /* Video Section */
+  .movie-video-section {
     margin-top: 50px;
     padding: 0 5%;
-}
-
-.movie-trailer {
+  }
+  
+  .movie-trailer {
     width: 100%;
     height: 600px;
     border-radius: 15px;
     box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.movie-trailer:hover {
+  }
+  
+  .movie-trailer:hover {
     transform: scale(1.02);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .movie-details-header {
-        flex-direction: column;
-        height: auto;
-        padding: 4%;
-        text-align: center;
-    }
-
-    .movie-poster {
-        width: 100%;
-        max-width: 300px;
-        height: auto;
-        margin-bottom: 20px;
-    }
-
-    .movie-info {
-        margin-left: 0;
-    }
-
-    .movie-trailer {
-        height: 400px;
-    }
-}
-
-/* Loader */
-.movie-details-loading {
+  }
+  
+  /* Loader */
+  .movie-details-loading {
     position: fixed;
     top: 0;
     left: 0;
@@ -226,18 +206,48 @@ body {
     align-items: center;
     flex-direction: column;
     z-index: 9999;
-}
-
-.spinner {
+  }
+  
+  .spinner {
     width: 50px;
     height: 50px;
     border: 4px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     border-top-color: var(--highlight-green);
     animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1200px) {
+    .movie-details-header {
+      flex-direction: column;
+      height: auto;
+      padding: 4%;
+      text-align: center;
+    }
+  
+    .movie-poster {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+  
+    .movie-info {
+      margin-left: 0;
+    }
+  
+    .movie-trailer {
+      height: 400px;
+    }
+  }
+  

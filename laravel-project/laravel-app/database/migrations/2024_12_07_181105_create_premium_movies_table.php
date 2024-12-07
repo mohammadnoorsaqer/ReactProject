@@ -12,8 +12,9 @@ class CreatePremiumMoviesTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('description')->nullable();
-            $table->string('image_url')->nullable();
-            $table->string('video_url')->nullable();
+            $table->string('image_url', 512); // Increase the length to 512 characters
+            $table->string('video_url', 512);
+            $table->string('release_date', 191);
             $table->timestamps();
         });
     }

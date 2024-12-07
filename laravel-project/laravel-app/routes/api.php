@@ -40,9 +40,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('watchlist/{movieId}', [WatchlistController::class, 'destroy']);
 });
 
+// routes/api.php
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/premium-movies', [PremiumMoviesController::class, 'index']);
+    Route::get('/premium-movies/{id}', [PremiumMoviesController::class, 'show']); // This route handles individual movie requests.
 });
+
 // User Management Routes (Authentication Required)
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('users/{id}', [UserController::class, 'update']);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2"; // Import SweetAlert2
 import "./MovieDetails.css";
 
 const MovieDetails = () => {
@@ -9,12 +10,16 @@ const MovieDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Function to add movie to watchlist
+  // Function to add movie to watchlist with SweetAlert
   const addToWatchlist = (movieId) => {
     const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
   
     if (!token) {
-      alert("Please login to add movies to your watchlist.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Login Required',
+        text: 'Please login to add movies to your watchlist.',
+      });
       return;
     }
   
@@ -29,25 +34,43 @@ const MovieDetails = () => {
         }
       )
       .then((response) => {
-        alert("Added to Watchlist!");
+        Swal.fire({
+          icon: 'success',
+          title: 'Added to Watchlist!',
+          text: `${movie.title} has been added to your watchlist.`,
+        });
       })
       .catch((error) => {
         console.error("Error adding to watchlist:", error);
-        alert("Failed to add to watchlist.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to add',
+          text: 'There was an issue adding the movie to your watchlist. Please try again.',
+        });
       });
   };
-  
+
   useEffect(() => {
+    // Fetching the regular movie details first
     axios
       .get(`http://localhost:8000/api/movies/${id}`)
       .then((response) => {
         setMovie(response.data);
         setLoading(false);
       })
-      .catch((error) => {
-        console.error("Error fetching movie details:", error);
-        setError(error.response?.data?.error || "Failed to load movie details.");
-        setLoading(false);
+      .catch(() => {
+        // If fetching regular movie details fails, try fetching premium movie details
+        axios
+          .get(`http://localhost:8000/api/premium-movies/${id}`)
+          .then((response) => {
+            setMovie(response.data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching movie details:", error);
+            setError(error.response?.data?.error || "Failed to load movie details.");
+            setLoading(false);
+          });
       });
   }, [id]);
 

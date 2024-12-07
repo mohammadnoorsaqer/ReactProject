@@ -9,6 +9,34 @@ const ShowDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Function to add show to watchlist
+  const addToWatchlist = (showId) => {
+    const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+  
+    if (!token) {
+      alert("Please login to add shows to your watchlist.");
+      return;
+    }
+  
+    axios
+      .post(
+        'http://localhost:8000/api/watchlist',
+        { show_id: showId }, // Send the show_id, no need for media_type
+        {
+          headers: {
+            Authorization: `Bearer ${token}` // Include token in the headers
+          }
+        }
+      )
+      .then((response) => {
+        alert("Added to Watchlist!");
+      })
+      .catch((error) => {
+        console.error("Error adding to watchlist:", error);
+        alert("Failed to add to watchlist.");
+      });
+  };
+  
   useEffect(() => {
     axios
       .get(`http://localhost:8000/api/shows/${id}`)
@@ -17,7 +45,7 @@ const ShowDetails = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching shows details:", error);
+        console.error("Error fetching show details:", error);
         setError(error.response?.data?.error || "Failed to load show details.");
         setLoading(false);
       });
@@ -30,7 +58,7 @@ const ShowDetails = () => {
       'linear-gradient(135deg, #000428, #004e92)',
       'linear-gradient(135deg, #3494e6, #ec6ead)',
       'linear-gradient(135deg, #41295a, #2F0743)',
-      'linear-gradient(135deg, #0F2027, #203A43, #2c5364)'
+      'linear-gradient(135deg, #0F2027, #203A43, #2c5364)',
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   };
@@ -90,7 +118,9 @@ const ShowDetails = () => {
               <i className="play-icon">▶</i> Play
             </button>
             <button className="btn-more-info">More Info</button>
-            <button className="btn-watchlist">+ Watchlist</button>
+            <button className="btn-watchlist" onClick={() => addToWatchlist(show.id)}>
+              + Watchlist
+            </button>
           </div>
         </div>
       </div>
