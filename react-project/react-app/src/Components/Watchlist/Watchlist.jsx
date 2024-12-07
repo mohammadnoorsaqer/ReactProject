@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-import Footer from "../Footer/Footer";
-import Navbar from "../NavBar/NavBar";
 
 const Watchlist = () => {
   const [watchlist, setWatchlist] = useState([]);
@@ -17,6 +15,7 @@ const Watchlist = () => {
         },
       })
       .then((response) => {
+        console.log("Watchlist response:", response.data); // Log the response to inspect the data
         setWatchlist(response.data);
       })
       .catch((error) => {
@@ -47,7 +46,7 @@ const Watchlist = () => {
 
           if (response.status === 200) {
             // Remove the movie from the watchlist locally
-            setWatchlist(watchlist.filter((movie) => movie.id !== movieId));
+            setWatchlist(watchlist.filter((item) => item.movie?.id !== movieId && item.show?.id !== movieId));
 
             Swal.fire({
               title: 'Deleted!',
@@ -73,8 +72,56 @@ const Watchlist = () => {
     });
   };
 
+  const handleRemoveFromWatchlists = (showId) => {
+    Swal.fire({
+      title: 'Remove from Watchlist?',
+      text: 'Are you sure you want to delete this show?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#00ff41',
+      cancelButtonColor: '#121212',
+      confirmButtonText: 'Delete',
+      background: '#121212',
+      color: '#00ff41',
+      borderColor: '#00ff41',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(`http://localhost:8000/api/watchlist/${showId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.status === 200) {
+            // Remove the show from the watchlist locally
+            setWatchlist(watchlist.filter((item) => item.show?.id !== showId));
+
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Show removed from your watchlist.',
+              icon: 'success',
+              confirmButtonColor: '#00ff41',
+              background: '#121212',
+              color: '#00ff41',
+            });
+          }
+        } catch (error) {
+          console.error("Error removing from watchlist:", error);
+          Swal.fire({
+            title: 'Error!',
+            text: 'Could not remove show.',
+            icon: 'error',
+            confirmButtonColor: '#00ff41',
+            background: '#121212',
+            color: '#00ff41',
+          });
+        }
+      }
+    });
+  };
+
   return (
-   
     <div style={{
       backgroundColor: '#121212',
       color: '#00ff41',
@@ -83,8 +130,8 @@ const Watchlist = () => {
       fontFamily: 'monospace'
     }}>
       <h1 style={{
-        textAlign: 'center', 
-        fontSize: '3rem', 
+        textAlign: 'center',
+        fontSize: '3rem',
         marginBottom: '40px'
       }}>
         CYBER WATCHLIST
@@ -97,30 +144,31 @@ const Watchlist = () => {
           gap: '30px',
         }}>
           {watchlist.map((item) => {
-            const imageUrl = item.movie.image_url || "https://via.placeholder.com/250x400"; // Fallback image URL
+            const imageUrl = item.movie?.image_url || item.show .image_url;
+            const title = item.movie?.title || item.show?.title || "Untitled";
+            const description = item.movie?.description || item.show?.description || "No description available.";
+            const genre = item.movie?.genre || item.show?.genre || "UNKNOWN";
+            const rating = item.movie?.rating || item.show?.rating || "N/A";
+            const itemId = item.movie?.id || item.show?.id;
+
             return (
-              <div 
-                key={item.id} 
-                style={{
-                  backgroundColor: '#1E1E1E',
-                  borderRadius: '15px',
-                  overflow: 'hidden',
-                  border: '2px solid #00ff41',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                }}
-              >
-                <div 
-                  style={{
-                    height: '400px',
-                    backgroundImage: `url(${imageUrl})`, // Use fallback image if missing
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                >
-                  <button 
-                    onClick={() => handleRemoveFromWatchlist(item.id)}
+              <div key={itemId} style={{
+                backgroundColor: '#1E1E1E',
+                borderRadius: '15px',
+                overflow: 'hidden',
+                border: '2px solid #00ff41',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              }}>
+                <div style={{
+                  height: '400px',
+                  backgroundImage: `url(${imageUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  <button
+                    onClick={() => item.movie ? handleRemoveFromWatchlist(item.movie.id) : handleRemoveFromWatchlists(item.show.id)}
                     style={{
                       position: 'absolute',
                       top: '15px',
@@ -135,63 +183,28 @@ const Watchlist = () => {
                       justifyContent: 'center',
                       alignItems: 'center',
                       cursor: 'pointer',
-                      transition: 'all 0.3s ease'
                     }}
                   >
-                    ✕
+                    ✖
                   </button>
                 </div>
                 <div style={{
-                  padding: '20px',
-                  backgroundColor: '#1E1E1E'
+                  padding: '15px',
+                  textAlign: 'center',
+                  color: '#fff',
                 }}>
-                  <h3 style={{
-                    margin: '0 0 15px 0',
-                    fontSize: '1.5rem',
-                    color: '#00ff41'
-                  }}>
-                    {item.movie.title}
-                  </h3>
-                  <p style={{
-                    margin: '0 0 15px 0',
-                    color: '#00ff41',
-                    opacity: 0.7
-                  }}>
-                    {item.movie.description.length > 120 
-                      ? item.movie.description.substring(0, 120) + '...' 
-                      : item.movie.description}
-                  </p>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    color: '#00ff41',
-                    opacity: 0.8
-                  }}>
-                    <span>{item.movie.genre || "UNKNOWN"}</span>
-                    <span>🌟 {item.movie.rating || "N/A"}/10</span>
-                  </div>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                  <p>{genre}</p>
+                  <p>Rating: {rating}</p>
                 </div>
               </div>
             );
           })}
         </div>
       ) : (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '400px',
-          color: '#00ff41',
-          textAlign: 'center'
-        }}>
-          <p style={{ fontSize: '2rem' }}>
-            WATCHLIST PROTOCOL: EMPTY
-          </p>
-          <p>INITIATE MOVIE ACQUISITION</p>
-        </div>
+        <p>No items in your watchlist.</p>
       )}
-      <Footer/>
     </div>
   );
 };

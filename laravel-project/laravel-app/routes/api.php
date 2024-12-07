@@ -38,6 +38,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/watchlist', [WatchlistController::class, 'addToWatchlist']);
     Route::get('/watchlist', [WatchlistController::class, 'getWatchlist']);
     Route::delete('watchlist/{movieId}', [WatchlistController::class, 'destroy']);
+    Route::delete('watchlist/{showId}', [WatchlistController::class, 'destroy']); 
+
+
 });
 
 // routes/api.php

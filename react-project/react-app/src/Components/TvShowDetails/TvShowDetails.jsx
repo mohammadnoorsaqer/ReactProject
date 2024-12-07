@@ -50,6 +50,7 @@ const ShowDetails = () => {
         setLoading(false);
       });
   }, [id]);
+  
 
   // Generate a gradient background dynamically
   const generateDynamicBackground = () => {

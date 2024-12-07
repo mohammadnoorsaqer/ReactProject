@@ -118,7 +118,10 @@ class WatchlistController extends Controller
      */
     public function destroy($id)
     {
-        $watchlistItem = Watchlist::where('user_id', Auth::id())
+        $userId = Auth::id();
+
+        // Check for a watchlist item with the provided ID and authenticated user ID
+        $watchlistItem = Watchlist::where('user_id', $userId)
             ->where(function($query) use ($id) {
                 $query->where('movie_id', $id)
                       ->orWhere('show_id', $id);
