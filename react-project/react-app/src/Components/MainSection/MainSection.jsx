@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
+
 const MainSection = () => {
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);

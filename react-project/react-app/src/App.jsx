@@ -18,7 +18,7 @@ const Layout = () => {
     <div>
       <AuthProvider>
         <Navbar />
-        <MainSection />
+         <MainSection />
         <Footer />
       </AuthProvider>
     </div>
@@ -40,7 +40,7 @@ const ProtectedRoute = ({ children }) => {
 
   // if (!isAuthenticated) {
   //   return <Navigate to="/login" />;
-  // }
+
 
   return children;
 };

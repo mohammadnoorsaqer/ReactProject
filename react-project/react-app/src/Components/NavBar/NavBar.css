@@ -120,6 +120,12 @@ h4 {
   position: relative;
 }
 
+.header nav ul {
+  display: flex;  /* Align items horizontally */
+  gap: 20px;  /* Add space between the buttons */
+  align-items: center;
+}
+
 .header nav .login-btn {
   cursor: pointer;
   background: none;
@@ -192,4 +198,41 @@ h4 {
 
 .sub-header > div:last-of-type .sub-link {
   text-align: center;
+}
+.logout-btn, .profile-btn {
+  background-color: #1f1f1f;  /* Dark background similar to Hulu's */
+  color: #fff;  /* White text for contrast */
+  font-size: 14px;
+  font-weight: 600;  /* Semi-bold for a strong but not heavy appearance */
+  padding: 12px 20px;
+  border: 2px solid transparent;  /* Border becomes visible on hover */
+  border-radius: 4px;  /* Slightly rounded corners */
+  cursor: pointer;
+  text-transform: uppercase;
+  
+  letter-spacing: 1px;
+  transition: all 0.3s ease;  /* Smooth transition for hover and active states */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);  /* Light shadow to add depth */
+}
+
+.logout-btn:hover, .profile-btn:hover {
+  background-color: #333;  /* Slightly lighter dark shade on hover */
+  border-color: #fff;  /* White border on hover for contrast */
+  transform: scale(1.05);  /* Slightly scale the button on hover */
+}
+
+.logout-btn:focus, .profile-btn:focus {
+  outline: none;  /* Removes default outline on focus */
+}
+
+.logout-btn:active, .profile-btn:active {
+  transform: scale(0.98);  /* Slight shrink effect when clicked */
+}
+
+.logout-btn {
+  background-color: #1f1f1f;  /* Dark background */
+}
+
+.profile-btn {
+  background-color: #00b140;  /* Hulu green color */
 }

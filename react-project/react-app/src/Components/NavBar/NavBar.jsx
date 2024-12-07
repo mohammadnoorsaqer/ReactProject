@@ -1,10 +1,16 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./NavBar.css";
 import { AuthContext } from "../context/authContext.jsx";
 
 const Navbar = () => {
   const { currentUser, logout } = useContext(AuthContext);
+  const navigate = useNavigate();  // To handle programmatic navigation
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");  // Redirect to login after logout
+  };
 
   return (
     <header className="header">
@@ -14,7 +20,7 @@ const Navbar = () => {
             <>
               {/* Display Logout and Profile buttons if the user is logged in */}
               <li>
-                <button onClick={logout} className="logout-btn">Logout</button>
+                <button onClick={handleLogout} className="logout-btn">Logout</button>
               </li>
               <li>
                 <Link to="/profile" className="profile-btn">My Profile</Link>

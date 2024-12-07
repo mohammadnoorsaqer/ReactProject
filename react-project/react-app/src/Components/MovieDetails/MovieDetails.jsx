@@ -11,7 +11,7 @@ const MovieDetails = () => {
 
   // Function to add movie to watchlist
   const addToWatchlist = (movieId) => {
-    const token = localStorage.getItem("auth_token"); // Assuming you store the token in localStorage
+    const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
   
     if (!token) {
       alert("Please login to add movies to your watchlist.");

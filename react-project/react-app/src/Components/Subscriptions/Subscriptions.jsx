@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import './Subscriptions.css';
-
+import Navbar from '../NavBar/NavBar';
 const Subscriptions = () => {
   const [error, setError] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false); // Track subscription status
@@ -45,6 +45,16 @@ const Subscriptions = () => {
 
   // Subscribe to a plan
   const bookSubscription = async (type, price) => {
+    if (!token) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Please Log In',
+        text: 'You need to log in to subscribe to a plan.',
+        confirmButtonText: 'Log In',
+      });
+      return;
+    }
+
     if (isSubscribed) {
       Swal.fire({
         icon: 'info',
@@ -231,6 +241,7 @@ const Subscriptions = () => {
 
   return (
     <div className="subscriptions-container">
+      <Navbar/>
       <div className="subscriptions-header">
         <h1>Choose Your Streaming Plan</h1>
         <p>Customize your entertainment experience</p>
@@ -244,42 +255,47 @@ const Subscriptions = () => {
           </div>
           <div className="plan-features">
             <ul>
-              <li>✓ Limited Ads</li>
-              <li>✓ HD Streaming (720p)</li>
-              <li>✓ Base Catalog Access</li>
-              <li>✓ 2 Simultaneous Streams</li>
-              <li>✓ Local Channels</li>
-              <li>✓ Basic Customer Support</li>
-              <li>✗ 4K Content</li>
-              <li>✗ Exclusive Originals</li>
+            <li>Limited Ads</li>
+            <li>Access to Standard Definition</li>
+            <li>1 Device at a time</li>
+            <li>5GB Cloud Storage</li>
+            <li>Basic Customer Support</li>
             </ul>
           </div>
-          <button onClick={() => bookSubscription('Basic', 9.99)}>Subscribe</button>
+          <button
+            className="subscribe-button"
+            onClick={() => bookSubscription('Basic', 9.99)}
+          >
+            Subscribe Now
+          </button>
         </div>
-        <div className="subscription-card standard">
+
+        <div className="subscription-card premium">
           <div className="plan-header">
-            <h2>Standard</h2>
-            <span className="price">$15.99 / month</span>
+            <h2>Premium</h2>
+            <span className="price">$19.99 / month</span>
           </div>
           <div className="plan-features">
             <ul>
-              <li>✓ No Ads</li>
-              <li>✓ HD Streaming (1080p)</li>
-              <li>✓ Full Catalog Access</li>
-              <li>✓ 4 Simultaneous Streams</li>
-              <li>✓ Premium Content</li>
-              <li>✓ 24/7 Customer Support</li>
-              <li>✓ 4K Content</li>
-              <li>✓ Exclusive Originals</li>
+              <li>No Ads</li>
+              <li>Access to HD and 4K</li>
+              <li>4 Devices at a time</li>
+              <li>50GB Cloud Storage</li>
+              <li>Priority Customer Support</li>
             </ul>
           </div>
-          <button onClick={() => bookSubscription('Standard', 15.99)}>Subscribe</button>
+          <button
+            className="subscribe-button"
+            onClick={() => bookSubscription('Premium', 19.99)}
+          >
+            Subscribe Now
+          </button>
         </div>
       </div>
 
       {isSubscribed && (
-        <div className="subscription-status">
-          <p>You are currently subscribed to the {subscriptionType} plan.</p>
+        <div className="current-subscription">
+          <h3>Your Current Subscription: {subscriptionType}</h3>
           <button onClick={cancelSubscription}>Cancel Subscription</button>
         </div>
       )}
