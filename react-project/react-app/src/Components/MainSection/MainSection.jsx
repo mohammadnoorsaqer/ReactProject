@@ -7,16 +7,17 @@ import { Link } from "react-router-dom";
 const MainSection = () => {
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);
-  const [premiumMovies, setPremiumMovies] = useState([]); // New state for Premium Movies
+  const [premiumMovies, setPremiumMovies] = useState([]);
   const [loadingMovies, setLoadingMovies] = useState(true);
   const [loadingShows, setLoadingShows] = useState(true);
-  const [loadingPremium, setLoadingPremium] = useState(false); // New loading state
+  const [loadingPremium, setLoadingPremium] = useState(false);
   const [errorMovies, setErrorMovies] = useState(null);
   const [errorShows, setErrorShows] = useState(null);
-  const [errorPremium, setErrorPremium] = useState(null); // New error state
+  const [errorPremium, setErrorPremium] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('movies');
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Fetching data on search term change
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -87,8 +88,23 @@ const MainSection = () => {
     setSelectedCategory(category);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <main className="main-content">
+      {/* Search Bar */}
+      <section className="search-bar-section">
+        <input
+          type="text"
+          placeholder="Search movies or shows..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="search-bar"
+        />
+      </section>
+
       <section className="categories">
         <div className="category-buttons">
           <button 
@@ -145,6 +161,7 @@ const MainSection = () => {
               </div>
             </div>
           )}
+
           {selectedCategory === 'premium' && (
             <div className="content-section">
               <h3>Premium Movies</h3>
