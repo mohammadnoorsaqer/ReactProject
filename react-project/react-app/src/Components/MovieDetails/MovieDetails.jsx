@@ -26,29 +26,61 @@ const MovieDetails = () => {
       return;
     }
 
-    // Adjust the data to send the right movie type (regular or premium)
-    const data = isPremium ? { premium_movie_id: movieId } : { movie_id: movieId };
-
+    // Fetch current watchlist to check if the movie is already added
     axios
-      .post("http://localhost:8000/api/watchlist", data, {
+      .get("http://localhost:8000/api/watchlist", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        Swal.fire({
-          icon: "success",
-          title: "Added to Watchlist!",
-          text: `${movie.title} has been added to your watchlist.`,
+        const watchlist = response.data;
+
+        // Check if the movie is already in the watchlist
+        const isAlreadyInWatchlist = watchlist.some((item) => {
+          if (isPremium) {
+            return item.premium_movie?.id === movieId;
+          } else {
+            return item.movie?.id === movieId;
+          }
         });
+
+        if (isAlreadyInWatchlist) {
+          Swal.fire({
+            icon: "info",
+            title: "Already in Watchlist",
+            text: "This movie is already in your watchlist.",
+          });
+          return;
+        }
+
+        // If the movie is not already in the watchlist, proceed with adding it
+        const data = isPremium ? { premium_movie_id: movieId } : { movie_id: movieId };
+
+        axios
+          .post("http://localhost:8000/api/watchlist", data, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            Swal.fire({
+              icon: "success",
+              title: "Added to Watchlist!",
+              text: `${movie.title} has been added to your watchlist.`,
+            });
+          })
+          .catch((error) => {
+            console.error("Error adding to watchlist:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Failed to add",
+              text: "There was an issue adding the movie to your watchlist. Please try again.",
+            });
+          });
       })
       .catch((error) => {
-        console.error("Error adding to watchlist:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Failed to add",
-          text: "There was an issue adding the movie to your watchlist. Please try again.",
-        });
+        console.error("Error fetching watchlist:", error);
       });
   };
 
@@ -138,19 +170,19 @@ const MovieDetails = () => {
               <h1 className="movie-title">{movie.title || "Untitled"}</h1>
 
               <>
-  <span>{movie.release_date || "TBA"}</span>
-  <span> • </span>
-  <span>
-    {movie.genres && movie.genres.length > 0
-      ? movie.genres.map((genre, index) => (
-          <span key={genre.id}>
-            {genre.name}
-            {index < movie.genres.length - 1 && ", "}
-          </span>
-        ))
-      : ""}
-  </span>
-</>
+                <span>{movie.release_date || "TBA"}</span>
+                <span> • </span>
+                <span>
+                  {movie.genres && movie.genres.length > 0
+                    ? movie.genres.map((genre, index) => (
+                        <span key={genre.id}>
+                          {genre.name}
+                          {index < movie.genres.length - 1 && ", "}
+                        </span>
+                      ))
+                    : ""}
+                </span>
+              </>
 
               <p className="movie-description">{movie.description || "No description available."}</p>
 

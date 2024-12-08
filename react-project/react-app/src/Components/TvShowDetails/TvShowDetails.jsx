@@ -6,7 +6,6 @@ import "./TvShowDetails.css";
 import Navbar from "../NavBar/NavBar";
 import Footer from "../Footer/Footer";
 
-
 const ShowDetails = () => {
   const { id } = useParams();
   const [show, setShow] = useState(null);
@@ -27,28 +26,59 @@ const ShowDetails = () => {
       return;
     }
 
-    // Adjust the data to send the right show type (regular or premium)
-    const data = isPremium ? { premium_show_id: showId } : { show_id: showId };
-
+    // Check if the show is already in the watchlist
     axios
-      .post("http://localhost:8000/api/watchlist", data, {
+      .get("http://localhost:8000/api/watchlist", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        Swal.fire({
-          icon: "success",
-          title: "Added to Watchlist!",
-          text: `${show.title} has been added to your watchlist.`,
-        });
+        const watchlist = response.data;
+        const alreadyAdded = watchlist.some(
+          (item) => item.show_id === showId || item.premium_show_id === showId
+        );
+
+        if (alreadyAdded) {
+          Swal.fire({
+            icon: "info",
+            title: "Already in Watchlist",
+            text: `${show.title} is already in your watchlist.`,
+          });
+          return;
+        }
+
+        // If not already added, proceed to add to watchlist
+        const data = isPremium ? { premium_show_id: showId } : { show_id: showId };
+
+        axios
+          .post("http://localhost:8000/api/watchlist", data, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            Swal.fire({
+              icon: "success",
+              title: "Added to Watchlist!",
+              text: `${show.title} has been added to your watchlist.`,
+            });
+          })
+          .catch((error) => {
+            console.error("Error adding to watchlist:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Failed to add",
+              text: "There was an issue adding the show to your watchlist. Please try again.",
+            });
+          });
       })
       .catch((error) => {
-        console.error("Error adding to watchlist:", error);
+        console.error("Error fetching watchlist:", error);
         Swal.fire({
           icon: "error",
-          title: "Failed to add",
-          text: "There was an issue adding the show to your watchlist. Please try again.",
+          title: "Failed to load watchlist",
+          text: "There was an issue loading your watchlist. Please try again.",
         });
       });
   };
@@ -116,7 +146,7 @@ const ShowDetails = () => {
 
   return (
     <div className="show-details-container">
-    <Navbar/>
+      <Navbar />
       <div
         className="show-details-header"
         style={{
@@ -190,7 +220,7 @@ const ShowDetails = () => {
           </div>
         </div>
       )}
-      <Footer/>
+      <Footer />
     </div>
   );
 };
