@@ -35,6 +35,15 @@ const LoginPage = () => {
     </div>
   );
 };
+const Layout3 = () => {
+  return (
+    <div>
+        <Navbar/>
+         <Watchlist/>
+        <Footer/>
+    </div>
+  );
+};
 
 // ProtectedRoute component to protect routes that need authentication
 const ProtectedRoute = ({ children }) => {
@@ -86,7 +95,7 @@ function App() {
     },
     {
       path: "/watchlist",
-      element: <Watchlist />,
+      element: <Layout3 />,
     },
     {
       path: "/subscriptions",
