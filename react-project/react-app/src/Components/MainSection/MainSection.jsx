@@ -2,7 +2,7 @@ import "./MainSection.css";
 import './SearchBar.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const MainSection = () => {
   const [movies, setMovies] = useState([]);
@@ -16,8 +16,10 @@ const MainSection = () => {
   const [errorPremium, setErrorPremium] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('movies');
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Use navigate for programmatic navigation
+  const navigate = useNavigate();
 
-  // Fetching data on search term change
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -50,7 +52,7 @@ const MainSection = () => {
         setLoadingPremium(true);
         const response = await axios.get('http://localhost:8000/api/premium-movies', {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-          params: { search: searchTerm } // Add the search term to the API request
+          params: { search: searchTerm }
         });
         setPremiumMovies(response.data);
         setLoadingPremium(false);
@@ -59,7 +61,6 @@ const MainSection = () => {
         setLoadingPremium(false);
       }
     };
-    
 
     fetchMovies();
     fetchShows();
@@ -94,21 +95,27 @@ const MainSection = () => {
     setSearchTerm(event.target.value);
   };
 
+  // New function to handle navigation to movie details
+  const handlePopularMovieClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
+
   return (
     <main className="main-content">
       {/* Search Bar */}
       <section className="search-bar-section">
-      <div className="search-bar-wrapper">
-        <input 
-          type="text"
-          placeholder="Search movies or shows..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="search-bar"
-        />
-      </div>
-    </section>
+        <div className="search-bar-wrapper">
+          <input 
+            type="text"
+            placeholder="Search movies or shows..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="search-bar"
+          />
+        </div>
+      </section>
 
+      {/* Category Buttons */}
       <section className="categories">
         <div className="category-buttons">
           <button 
@@ -182,6 +189,50 @@ const MainSection = () => {
               </div>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Popular Movies Slider */}
+      <section className="popular-slider">
+        <div className="slider-controls">
+          <h3>Popular Movies</h3>
+          <button 
+            className="scroll-btn scroll-left" 
+            onClick={() => {
+              const slider = document.querySelector('.slider-items');
+              slider.scrollLeft -= 300;
+            }}
+          >
+            ← 
+          </button>
+          <button 
+            className="scroll-btn scroll-right"
+            onClick={() => {
+              const slider = document.querySelector('.slider-items');
+              slider.scrollLeft += 300;
+            }}
+          >
+            → 
+          </button>
+        </div>
+        <div className="slider">
+          <div className="slider-items">
+            {movies.filter(movie => movie.is_popular).map((movie) => (
+              <div 
+                key={movie.id} 
+                className="slider-item"
+                onClick={() => handlePopularMovieClick(movie.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                <img 
+                  src={movie.image_url || 'https://via.placeholder.com/250x350?text=No+Image'} 
+                  alt={movie.title} 
+                  className="slider-image" 
+                />
+                <h4>{movie.title}</h4>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </main>
