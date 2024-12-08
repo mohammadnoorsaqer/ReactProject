@@ -18,7 +18,7 @@ class PremiumMoviesController extends Controller
             ->first();
 
         if (!$subscription) {
-            return response()->json(['error' => 'Access denied. Premium subscription required.'], 403);
+            return response()->json(['error' => 'Premium subscription required.'], 403);
         }
 
         // Get search term from query parameter
@@ -42,7 +42,7 @@ class PremiumMoviesController extends Controller
             ->first();
 
         if (!$subscription) {
-            return response()->json(['error' => 'Access denied. Premium subscription required.'], 403);
+            return response()->json(['error' => 'Premium subscription required.'], 403);
         }
 
         // Retrieve the movie by its ID

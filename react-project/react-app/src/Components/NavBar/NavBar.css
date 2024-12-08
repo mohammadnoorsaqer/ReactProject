@@ -337,3 +337,28 @@ html, body {
 .login-link:hover::after {
   width: 100%;
 }
+.navbar-user-avatar {
+  margin-left: 10px;
+}
+
+.navbar-avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover; /* Ensures the avatar is cropped to a circle */
+}
+.navbar-avatar-text {
+  color: #1CE783;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  letter-spacing: 0.5px;
+}
+
+.navbar-avatar-text:hover {
+  color: #fff;
+  transform: scale(1.05);
+  text-shadow: 0 0 15px rgba(28, 231, 131, 0.7);
+}
