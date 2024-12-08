@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "./TvShowDetails.css";
+import Navbar from "../NavBar/NavBar";
+import Footer from "../Footer/Footer";
 
 
 const ShowDetails = () => {
@@ -114,6 +116,7 @@ const ShowDetails = () => {
 
   return (
     <div className="show-details-container">
+    <Navbar/>
       <div
         className="show-details-header"
         style={{
@@ -187,6 +190,7 @@ const ShowDetails = () => {
           </div>
         </div>
       )}
+      <Footer/>
     </div>
   );
 };
