@@ -13,7 +13,6 @@ const MovieDetails = () => {
   const [error, setError] = useState(null);
   const [showTrailerPopup, setShowTrailerPopup] = useState(false);
 
-  // Function to add movie to watchlist with SweetAlert
   const addToWatchlist = (movieId, isPremium = false) => {
     const token = localStorage.getItem("token");
 
@@ -26,7 +25,7 @@ const MovieDetails = () => {
       return;
     }
 
-    // Fetch current watchlist to check if the movie is already added
+    // Fetch the current watchlist to check if the movie is already in it
     axios
       .get("http://localhost:8000/api/watchlist", {
         headers: {
@@ -34,7 +33,7 @@ const MovieDetails = () => {
         },
       })
       .then((response) => {
-        const watchlist = response.data;
+        const watchlist = response.data.watchlist || [];
 
         // Check if the movie is already in the watchlist
         const isAlreadyInWatchlist = watchlist.some((item) => {
@@ -46,24 +45,26 @@ const MovieDetails = () => {
         });
 
         if (isAlreadyInWatchlist) {
+          // Show SweetAlert saying the movie is already in the watchlist
           Swal.fire({
             icon: "info",
             title: "Already in Watchlist",
             text: "This movie is already in your watchlist.",
           });
-          return;
+          return; // Exit without adding again
         }
 
-        // If the movie is not already in the watchlist, proceed with adding it
+        // Prepare the data to add (based on movie type: regular or premium)
         const data = isPremium ? { premium_movie_id: movieId } : { movie_id: movieId };
 
+        // Make a request to add the movie to the watchlist
         axios
           .post("http://localhost:8000/api/watchlist", data, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           })
-          .then((response) => {
+          .then(() => {
             Swal.fire({
               icon: "success",
               title: "Added to Watchlist!",
@@ -81,6 +82,11 @@ const MovieDetails = () => {
       })
       .catch((error) => {
         console.error("Error fetching watchlist:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Failed to fetch watchlist",
+          text: "There was an issue fetching your watchlist. Please try again.",
+        });
       });
   };
 
