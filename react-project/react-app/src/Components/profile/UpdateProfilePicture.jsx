@@ -1,3 +1,7 @@
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -7,6 +11,7 @@ const UpdateProfilePicture = () => {
     const [token, setToken] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [preview, setPreview] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const currentUserData = localStorage.getItem('currentUser');
@@ -54,10 +59,21 @@ const UpdateProfilePicture = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!selectedFile) return;
+
+        if (!selectedFile) {
+            Swal.fire({
+                title: 'No File Selected!',
+                text: 'Please choose a file before uploading.',
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+            });
+            return;
+        }
 
         const formData = new FormData();
         formData.append('avatar', selectedFile);
+
+        setIsLoading(true);
 
         try {
             await axios.post(
@@ -78,11 +94,13 @@ const UpdateProfilePicture = () => {
             });
         } catch (error) {
             Swal.fire({
-                title: 'Oops!',
-                text: 'Failed to update profile picture. Please try again later.',
+                title: 'Error!',
+                text: error.response?.data?.message || 'Failed to update profile picture. Please try again later.',
                 icon: 'error',
                 confirmButtonText: 'Okay',
             });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -124,50 +142,6 @@ const UpdateProfilePicture = () => {
                     textShadow: '0 0 10px rgba(28, 231, 131, 0.8)',
                 }}>Update Profile Picture</h2>
 
-                <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    overflow: 'hidden',
-                    zIndex: 0,
-                }}>
-                    {/* Moving Icons */}
-                    {[...Array(10)].map((_, i) => (
-                        <div
-                            key={i}
-                            style={{
-                                position: 'absolute',
-                                top: `${Math.random() * 100}%`,
-                                left: `${Math.random() * 100}%`,
-                                width: `${Math.random() * 50 + 30}px`,
-                                height: `${Math.random() * 50 + 30}px`,
-                                background: `url('https://image.shutterstock.com/image-vector/film-reel-icon-260nw-1245294567.jpg') no-repeat center center`,
-                                backgroundSize: 'contain',
-                                borderRadius: '50%',
-                                animation: `float ${Math.random() * 10 + 5}s infinite ease-in-out`,
-                                animationDelay: `${Math.random() * -10}s`,
-                                filter: 'opacity(0.5)',
-                            }}
-                        />
-                    ))}
-                    {[...Array(5)].map((_, i) => (
-                        <div
-                            key={i}
-                            style={{
-                                position: 'absolute',
-                                top: `${Math.random() * 100}%`,
-                                left: `${Math.random() * 100}%`,
-                                width: `${Math.random() * 60 + 40}px`,
-                                height: `${Math.random() * 60 + 40}px`,
-                                background: `url('https://image.shutterstock.com/image-vector/popcorn-box-illustration-cartoon-vector-260nw-1111252837.jpg') no-repeat center center`,
-                                backgroundSize: 'contain',
-                                animation: `float ${Math.random() * 10 + 5}s infinite ease-in-out`,
-                                animationDelay: `${Math.random() * -10}s`,
-                                filter: 'opacity(0.5)',
-                            }}
-                        />
-                    ))}
-                </div>
-
                 {userId && token ? (
                     <form onSubmit={handleSubmit}>
                         <div style={{ marginBottom: '1.5rem' }}>
@@ -197,35 +171,26 @@ const UpdateProfilePicture = () => {
                                         height: '150px',
                                         borderRadius: '50%',
                                         border: '4px solid #1ce783',
-                                        boxShadow: '0 0 15px rgba(28, 231, 131, 0.8)',
-                                        animation: 'glow 2s infinite alternate',
                                     }}
                                 />
                             </div>
                         )}
-                        <button type="submit" style={{
-                            width: '100%',
-                            padding: '0.75rem',
-                            backgroundColor: '#1ce783',
-                            color: '#000',
-                            border: 'none',
-                            borderRadius: '6px',
-                            fontWeight: 'bold',
-                            fontSize: '1rem',
-                            cursor: 'pointer',
-                            boxShadow: '0 0 10px rgba(28, 231, 131, 0.8)',
-                            transition: 'all 0.3s ease',
-                        }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.transform = 'scale(1.05)';
-                                e.currentTarget.style.boxShadow = '0 0 20px rgba(28, 231, 131, 1)';
+                        <button
+                            type="submit"
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                backgroundColor: isLoading ? '#999' : '#1ce783',
+                                color: isLoading ? '#666' : '#000',
+                                border: 'none',
+                                borderRadius: '6px',
+                                fontWeight: 'bold',
+                                fontSize: '1rem',
+                                cursor: isLoading ? 'not-allowed' : 'pointer',
                             }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.transform = 'scale(1)';
-                                e.currentTarget.style.boxShadow = '0 0 10px rgba(28, 231, 131, 0.8)';
-                            }}
+                            disabled={isLoading}
                         >
-                            Upload
+                            {isLoading ? 'Uploading...' : 'Upload'}
                         </button>
                     </form>
                 ) : (
@@ -256,3 +221,4 @@ const UpdateProfilePicture = () => {
 };
 
 export default UpdateProfilePicture;
+    
