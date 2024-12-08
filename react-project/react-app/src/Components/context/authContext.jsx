@@ -1,35 +1,27 @@
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
-export const AuthContext = createContext({
-  currentUser: null,
-  setCurrentUser: () => {}, // Default no-op function
-  logout: () => {}, // Default no-op function
-});
+// Create AuthContext
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  console.log('cureeent', currentUser); // Add this to inspect the full response
 
+  // Load user from localStorage if available
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("currentUser");
-      const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("currentUser");
+    const storedToken = localStorage.getItem("token");
 
-      if (storedUser && storedToken) {
-        const parsedUser = JSON.parse(storedUser);
-        setCurrentUser(parsedUser); // Set the user in context
-        axios.defaults.headers["Authorization"] = `Bearer ${storedToken}`; // Set token in axios headers
-      }
-    } catch (error) {
-      console.error("Error initializing AuthContext:", error);
-      localStorage.removeItem("currentUser");
-      localStorage.removeItem("token");
+    if (storedUser && storedToken) {
+      const parsedUser = JSON.parse(storedUser);
+      setCurrentUser(parsedUser); // Set the current user from localStorage
+      axios.defaults.headers["Authorization"] = `Bearer ${storedToken}`; // Set token in axios headers
     }
   }, []);
 
+  // Logout function that clears localStorage and resets the context state
   const logout = () => {
-    setCurrentUser(null);
+    setCurrentUser(null); // Clear the user state
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
     delete axios.defaults.headers["Authorization"];

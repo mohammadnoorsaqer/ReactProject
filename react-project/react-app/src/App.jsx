@@ -10,27 +10,21 @@ import Subscriptions from "./Components/Subscriptions/Subscriptions.jsx";
 import Login from './Components/login/Login.jsx';
 import Register from './Components/login/Register.jsx';
 import { AuthProvider } from './Components/context/authContext';
+import EditProfile from "./Components/profile/EditProfile.jsx"
+import UpdateProfilePicture from "./Components/profile/UpdateProfilePicture.jsx"
+import UserProfile from "./Components/profile/UserProfile.jsx"
+
+
 // import "./App.css";
 
 // Create a Layout component to wrap main content
 const Layout = () => {
   return (
     <div>
-      <AuthProvider>
-        <Navbar />
-         <MainSection />
-        <Footer />
-      </AuthProvider>
+        <Navbar/>
+         <MainSection/>
+        <Footer/>
     </div>
-  );
-};
-const ShowDetails =() =>{
-  return (
-    <>
-    <Navbar />
-    <TVShowDetails />
-    <Footer />
-    </>
   );
 };
 
@@ -55,6 +49,8 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+
+     
   const router = createBrowserRouter([
     {
       path: "/",
@@ -63,6 +59,18 @@ function App() {
           <Layout />
         </ProtectedRoute>
       ),
+    },
+    {
+      path:"/profile/:userid/update-picture",
+       element:<UpdateProfilePicture />
+    },
+    {
+      path:"/profile/:userId/edit",
+       element:<EditProfile />,
+    },
+    {
+      path:"/profile",
+       element:<UserProfile />,
     },
     {
       path: "/main",
@@ -74,7 +82,7 @@ function App() {
     },
     {
       path: "/show/:id",
-      element: <ShowDetails />,
+      element: <TVShowDetails />,
     },
     {
       path: "/watchlist",
@@ -97,13 +105,15 @@ function App() {
       path: "*",
       element: <div>Page not found</div>,
     },
-
   ]);
 
-  return( <AuthProvider> 
+  return( 
+  
+     <AuthProvider> 
   <RouterProvider router={router} />
-</AuthProvider>
-  );
+     </AuthProvider>
+  
+);
 }
 
 export default App;

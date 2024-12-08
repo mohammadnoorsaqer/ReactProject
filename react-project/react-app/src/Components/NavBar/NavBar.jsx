@@ -4,57 +4,49 @@ import "./NavBar.css";
 import { AuthContext } from "../context/authContext.jsx";
 
 const Navbar = () => {
-  const { currentUser, logout } = useContext(AuthContext);
+  const { currentUser, logout } = useContext(AuthContext); // Access currentUser and logout from context
 
   return (
     <header className="navbar-header-xyz">
-  <nav className="navbar">
-  <ul className="navbar-links">
-    {/* Left Side Links */}
-    <li>
-      <Link to="/" className="navbar-link">Home</Link>
-    </li>
-    <li>
-      <Link to="/watchlist" className="navbar-link">Watchlist</Link>
-    </li>
-    <li>
-          <Link 
-            to="/profile" 
-            className="navbar-link profile-link"
-          >
-            My Profile
-          </Link>
-        </li>
-    
-    {/* Right Side Buttons (only show logout/profile if logged in) */}
-    {currentUser ? (
-      <>
-      <li className="logout-item">
-  <button 
-    onClick={logout} 
-    className="navbar-button logout-button"
-    aria-label="Logout"
-  >
-    Logout
-  </button>
-</li>
+      <nav className="navbar">
+        <ul className="navbar-links">
+          {/* Left Side Links */}
+          <li>
+            <Link to="/" className="navbar-link">Home</Link>
+          </li>
+          <li>
+            <Link to="/watchlist" className="navbar-link">Watchlist</Link>
+          </li>
 
+          {/* Only show "My Profile" if the user is logged in */}
+          {currentUser && (
+            <li>
+              <Link to="/profile" className="navbar-link profile-link">
+                My Profile
+              </Link>
+            </li>
+          )}
 
-      
-      </>
-    ) : (
-      <li>
-        <Link 
-          to="/login" 
-          className="navbar-link login-link"
-        >
-          Log In
-        </Link>
-      </li>
-    )}
-  </ul>
-</nav>
-
+          {/* Right Side Buttons (only show logout/login if logged in) */}
+          {currentUser ? (
+            <li className="logout-item">
+              <button 
+                onClick={logout} 
+                className="navbar-button logout-button"
+                aria-label="Logout"
+              >
+                Logout
+              </button>
+            </li>
+          ) : (
+            <li>
+              <Link to="/login" className="navbar-link login-link">
+                Log In
+              </Link>
+            </li>
+          )}
+        </ul>
+      </nav>
 
       <div className="navbar-header-content-pqr">
         <img
