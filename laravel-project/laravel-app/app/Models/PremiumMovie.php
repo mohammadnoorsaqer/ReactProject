@@ -9,5 +9,5 @@ class PremiumMovie extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'image_url', 'video_url'];
+    protected $fillable = ['title', 'description', 'image_url', 'video_url','movie_url'];
 }

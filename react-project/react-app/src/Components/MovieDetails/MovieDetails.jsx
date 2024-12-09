@@ -12,10 +12,11 @@ const MovieDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showTrailerPopup, setShowTrailerPopup] = useState(false);
+  const [showPlayPopup, setShowPlayPopup] = useState(false);
 
   const addToWatchlist = (movieId, isPremium = false) => {
     const token = localStorage.getItem("token");
-
+  
     if (!token) {
       Swal.fire({
         icon: "warning",
@@ -24,73 +25,40 @@ const MovieDetails = () => {
       });
       return;
     }
-
-    // Fetch the current watchlist to check if the movie is already in it
+  
+    const data = isPremium ? { premium_movie_id: movieId } : { movie_id: movieId };
+  
     axios
-      .get("http://localhost:8000/api/watchlist", {
+      .post("http://localhost:8000/api/watchlist", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        const watchlist = response.data.watchlist || [];
-
-        // Check if the movie is already in the watchlist
-        const isAlreadyInWatchlist = watchlist.some((item) => {
-          if (isPremium) {
-            return item.premium_movie?.id === movieId;
-          } else {
-            return item.movie?.id === movieId;
-          }
-        });
-
-        if (isAlreadyInWatchlist) {
-          // Show SweetAlert saying the movie is already in the watchlist
+        if (response.data.message.includes("already")) {
           Swal.fire({
             icon: "info",
             title: "Already in Watchlist",
             text: "This movie is already in your watchlist.",
           });
-          return; // Exit without adding again
-        }
-
-        // Prepare the data to add (based on movie type: regular or premium)
-        const data = isPremium ? { premium_movie_id: movieId } : { movie_id: movieId };
-
-        // Make a request to add the movie to the watchlist
-        axios
-          .post("http://localhost:8000/api/watchlist", data, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then(() => {
-            Swal.fire({
-              icon: "success",
-              title: "Added to Watchlist!",
-              text: `${movie.title} has been added to your watchlist.`,
-            });
-          })
-          .catch((error) => {
-            console.error("Error adding to watchlist:", error);
-            Swal.fire({
-              icon: "error",
-              title: "Failed to add",
-              text: "There was an issue adding the movie to your watchlist. Please try again.",
-            });
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "Added to Watchlist!",
+            text: "Movie has been successfully added to your watchlist.",
           });
+        }
       })
       .catch((error) => {
-        console.error("Error fetching watchlist:", error);
+        console.error("Error adding to watchlist:", error);
         Swal.fire({
           icon: "error",
-          title: "Failed to fetch watchlist",
-          text: "There was an issue fetching your watchlist. Please try again.",
+          title: "Failed to Add",
+          text: error.response?.data?.error || "Something went wrong. Please try again.",
         });
       });
   };
 
-  // Open trailer popup
   const openTrailerPopup = () => {
     if (movie.video_url) {
       setShowTrailerPopup(true);
@@ -103,13 +71,27 @@ const MovieDetails = () => {
     }
   };
 
-  // Close trailer popup
   const closeTrailerPopup = () => {
     setShowTrailerPopup(false);
   };
 
+  const openPlayPopup = () => {
+    if (movie.movie_url) {
+      setShowPlayPopup(true);
+    } else {
+      Swal.fire({
+        icon: "info",
+        title: "No Movie Available",
+        text: "Sorry, no movie URL is available for this movie.",
+      });
+    }
+  };
+
+  const closePlayPopup = () => {
+    setShowPlayPopup(false);
+  };
+
   useEffect(() => {
-    // Fetching regular movie details first
     axios
       .get(`http://localhost:8000/api/movies/${id}`)
       .then((response) => {
@@ -117,13 +99,11 @@ const MovieDetails = () => {
         setLoading(false);
       })
       .catch(() => {
-        // If fetching regular movie details fails, try fetching premium movie details
         axios
           .get(`http://localhost:8000/api/premium-movies/${id}`)
           .then((response) => {
             setMovie(response.data);
             setLoading(false);
-            // Flag this movie as premium if it's found in the premium-movies endpoint
             setMovie((prevMovie) => ({ ...prevMovie, isPremium: true }));
           })
           .catch((error) => {
@@ -174,27 +154,23 @@ const MovieDetails = () => {
           <div className="movie-info-container">
             <div className="movie-info">
               <h1 className="movie-title">{movie.title || "Untitled"}</h1>
-
-              <>
-                <span>{movie.release_date || "TBA"}</span>
-                <span> • </span>
-                <span>
-                  {movie.genres && movie.genres.length > 0
-                    ? movie.genres.map((genre, index) => (
-                        <span key={genre.id}>
-                          {genre.name}
-                          {index < movie.genres.length - 1 && ", "}
-                        </span>
-                      ))
-                    : ""}
-                </span>
-              </>
-
+              <span>{movie.release_date || "TBA"}</span>
+              <span> • </span>
+              <span>
+                {movie.genres?.map((genre, index) => (
+                  <span key={genre.id}>
+                    {genre.name}
+                    {index < movie.genres.length - 1 && ", "}
+                  </span>
+                )) || ""}
+              </span>
               <p className="movie-description">{movie.description || "No description available."}</p>
-
               <div className="movie-action-buttons">
                 <button className="btn-play" onClick={openTrailerPopup}>
-                  <i className="play-icon">▶</i> Play
+                  <i className="play-icon">▶</i> Watch Trailer
+                </button>
+                <button className="btn-play" onClick={openPlayPopup}>
+                  <i className="play-icon">▶</i> Play Movie
                 </button>
                 <button className="btn-watchlist" onClick={() => addToWatchlist(movie.id, movie.isPremium)}>
                   + Watchlist
@@ -205,7 +181,6 @@ const MovieDetails = () => {
         </div>
       </div>
 
-      {/* Trailer Popup */}
       {showTrailerPopup && movie.video_url && (
         <div className="trailer-popup">
           <div className="trailer-popup-content">
@@ -222,6 +197,24 @@ const MovieDetails = () => {
           </div>
         </div>
       )}
+
+      {showPlayPopup && movie.movie_url && (
+        <div className="play-popup">
+          <div className="play-popup-content">
+            <button className="play-close-btn" onClick={closePlayPopup}>
+              &times;
+            </button>
+            <iframe
+              src={movie.movie_url}
+              title="Play Movie"
+              className="play-popup-iframe"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );

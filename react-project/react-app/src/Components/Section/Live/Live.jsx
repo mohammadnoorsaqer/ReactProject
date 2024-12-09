@@ -56,7 +56,23 @@ const Live = () => {
               />
             </div>
           </div>
-
+          <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%' }}>
+  <iframe
+    src="https://vidsrc.xyz/embed/movie/tt0111161"
+    style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      border: 'none',
+      borderRadius: '8px', // Adds rounded corners
+      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)', // Adds a subtle shadow
+    }}
+    allowFullScreen
+    title="Embedded Movie"
+  ></iframe>
+</div>
           <div className="legal-text">
             Live TV plan required. Regional restrictions, blackouts, and additional
             terms apply. See details

@@ -1,5 +1,5 @@
-import React from 'react'; // Import React
-import './Section.css'; // Assuming the CSS file is named App.css
+import React from 'react'; 
+import './Section.css'; 
 
 const SubHeader = () => {
   return (
@@ -9,6 +9,7 @@ const SubHeader = () => {
         alt="Bundle logos"
       />
       <div>
+
         <h4>Bundle with any Hulu plan & save</h4>
         <h3>Get Movix, Disney+, and ESPN+.</h3>
       </div>
@@ -16,4 +17,4 @@ const SubHeader = () => {
   );
 };
 
-export default SubHeader; // Export the component
+export default SubHeader; 
