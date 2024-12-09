@@ -13,7 +13,10 @@ const MovieDetails = () => {
   const [error, setError] = useState(null);
   const [showTrailerPopup, setShowTrailerPopup] = useState(false);
   const [showPlayPopup, setShowPlayPopup] = useState(false);
-
+  const checkSubscription = () => {
+    const subscriptionType = localStorage.getItem('subscriptionType'); // Get the subscription type from localStorage
+    return subscriptionType === 'Basic'; // Return true if the user is subscribed to the Basic plan
+  };
   const addToWatchlist = (movieId, isPremium = false) => {
     const token = localStorage.getItem("token");
   
@@ -169,9 +172,11 @@ const MovieDetails = () => {
                 <button className="btn-play" onClick={openTrailerPopup}>
                   <i className="play-icon">▶</i> Watch Trailer
                 </button>
-                <button className="btn-play" onClick={openPlayPopup}>
-                  <i className="play-icon">▶</i> Play Movie
-                </button>
+                {checkSubscription() && (
+                  <button className="btn-play" onClick={openPlayPopup}>
+                    <i className="play-icon">▶</i> Play Movie
+                  </button>
+                )}
                 <button className="btn-watchlist" onClick={() => addToWatchlist(movie.id, movie.isPremium)}>
                   + Watchlist
                 </button>
