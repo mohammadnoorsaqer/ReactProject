@@ -1,0 +1,70 @@
+import React from "react";
+import "./Live.css"; // Ensure this CSS file contains your styles
+
+const Live = () => {
+  return (
+    <div>
+      {/* Live Section */}
+      <section className="live">
+        <div className="live-border">
+          <h4>Hulu + Live TV</h4>
+          <div className="text-xl">Live TV Makes It Better</div>
+          <div className="sub-text">
+            Make the switch from cable. Get 75+ top channels with your favorite
+            live sports, news, and events - plus the entire Hulu streaming
+            library.
+          </div>
+          <div className="legal-text">
+            Live TV plan required. Regional restrictions, blackouts, and additional
+            terms apply. See details
+          </div>
+        </div>
+      </section>
+
+      {/* Live Sports Section */}
+      <section className="live-sports">
+        <div className="live-sports-content">
+          <div className="text-xl">Live Sports</div>
+          <div className="sub-text">
+            Catch your games at home or on the go. Stream live games from major
+            college and pro leagues including the NCAA®, NBA, NHL, NFL, and more.
+          </div>
+
+          <div className="live-sports-logos">
+            <div>
+              <img
+                src="https://github.com/bradtraversy/hulu-webpage-clone/blob/main/img/live-sports-logo-1.png?raw=true"
+                alt="Live Sports Logo 1"
+              />
+            </div>
+            <div>
+              <img
+                src="https://github.com/bradtraversy/hulu-webpage-clone/blob/main/img/live-sports-logo-2.png?raw=true"
+                alt="Live Sports Logo 2"
+              />
+            </div>
+            <div>
+              <img
+                src="https://github.com/bradtraversy/hulu-webpage-clone/blob/main/img/live-sports-logo-3.svg?raw=true"
+                alt="Live Sports Logo 3"
+              />
+            </div>
+            <div>
+              <img
+                src="https://github.com/bradtraversy/hulu-webpage-clone/blob/main/img/live-sports-logo-4.png?raw=true"
+                alt="Live Sports Logo 4"
+              />
+            </div>
+          </div>
+
+          <div className="legal-text">
+            Live TV plan required. Regional restrictions, blackouts, and additional
+            terms apply. See details
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Live;

@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import './Subscriptions.css';
 import Navbar from '../NavBar/NavBar';
 import Footer from '../Footer/Footer';
+
 const Subscriptions = () => {
   const [error, setError] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false); // Track subscription status
@@ -69,14 +70,15 @@ const Subscriptions = () => {
       title: `Confirm ${type} Subscription`,
       html: `
         <div class="payment-form">
-          <input 
-            type="text" 
-            id="cardName" 
-            class="swal2-input" 
-            placeholder="Cardholder Name" 
-            value="" 
-            readonly 
-            required>
+      <input 
+  type="text" 
+  id="cardName" 
+  class="swal2-input" 
+  placeholder="Cardholder Name" 
+  value="Default Name" 
+  readOnly 
+  required
+/>
           <input 
             type="text" 
             id="cardNumber" 
@@ -100,15 +102,14 @@ const Subscriptions = () => {
         </div>
       `,
       didOpen: () => {
-        // Fetch and parse the user data from localStorage
         const currentUser = localStorage.getItem('currentUser');
         const cardNameInput = document.getElementById('cardName');
         
         if (currentUser) {
-          const userData = JSON.parse(currentUser); // Parse the JSON string into an object
-          cardNameInput.value = userData.name || 'Default Name'; // Use the name property or fallback
+          const userData = JSON.parse(currentUser);
+          cardNameInput.value = userData.name || 'Default Name';
         } else {
-          cardNameInput.value = 'Default Name'; // Fallback if currentUser is not in localStorage
+          cardNameInput.value = 'Default Name';
         }
       },
       
@@ -168,11 +169,10 @@ const Subscriptions = () => {
             }
           );
 
-          // Update subscription state and save it to localStorage
-          setIsSubscribed(true); // Set subscription status to true
-          setSubscriptionType(type); // Set the current subscription type
-          localStorage.setItem('isSubscribed', true); // Save to localStorage
-          localStorage.setItem('subscriptionType', type); // Save to localStorage
+          setIsSubscribed(true);
+          setSubscriptionType(type);
+          localStorage.setItem('isSubscribed', true);
+          localStorage.setItem('subscriptionType', type);
 
           Swal.fire({
             icon: 'success',
@@ -217,11 +217,10 @@ const Subscriptions = () => {
           }
         );
 
-        // Update subscription state and clear localStorage
-        setIsSubscribed(false); // Set subscription status to false
-        setSubscriptionType(''); // Clear the subscription type
-        localStorage.removeItem('isSubscribed'); // Remove from localStorage
-        localStorage.removeItem('subscriptionType'); // Remove from localStorage
+        setIsSubscribed(false);
+        setSubscriptionType('');
+        localStorage.removeItem('isSubscribed');
+        localStorage.removeItem('subscriptionType');
 
         Swal.fire({
           icon: 'success',
@@ -277,7 +276,7 @@ const Subscriptions = () => {
 
   return (
     <div className="subscriptions-container">
-      <Navbar/>
+      <Navbar />
       <div className="subscriptions-header">
         <h1>Choose Your Streaming Plan</h1>
         <p>Customize your entertainment experience</p>
@@ -291,11 +290,11 @@ const Subscriptions = () => {
           </div>
           <div className="plan-features">
             <ul>
-            <li>Limited Ads</li>
-            <li>Access to Standard Definition</li>
-            <li>1 Device at a time</li>
-            <li>5GB Cloud Storage</li>
-            <li>Basic Customer Support</li>
+              <li>Limited Ads</li>
+              <li>Access to Standard Definition</li>
+              <li>1 Device at a time</li>
+              <li>5GB Cloud Storage</li>
+              <li>Basic Customer Support</li>
             </ul>
           </div>
           <button
@@ -335,7 +334,7 @@ const Subscriptions = () => {
           <button onClick={cancelSubscription}>Cancel Subscription</button>
         </div>
       )}
-      <Footer/>
+      <Footer />
     </div>
   );
 };

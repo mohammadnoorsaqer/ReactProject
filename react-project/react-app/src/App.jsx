@@ -13,6 +13,9 @@ import { AuthProvider } from './Components/context/authContext';
 import EditProfile from "./Components/profile/EditProfile.jsx"
 import UpdateProfilePicture from "./Components/profile/UpdateProfilePicture.jsx"
 import UserProfile from "./Components/profile/UserProfile.jsx"
+import Live from "./Components/Section/Live/Live.jsx";
+import SubHeader from "./Components/Section/SubHeader.jsx";
+import Chatbot from "./Components/ChatBot/ChatBot.jsx";
 
 
 // import "./App.css";
@@ -23,6 +26,9 @@ const Layout = () => {
     <div>
         <Navbar/>
          <MainSection/>
+         <SubHeader/>
+         <Live/>
+         <Chatbot/>
         <Footer/>
     </div>
   );

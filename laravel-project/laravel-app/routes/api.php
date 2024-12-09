@@ -31,7 +31,11 @@ Route::middleware(['api'])->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('subscribe', [SubscriptionController::class, 'store']);
     Route::post('/cancel-subscription', [SubscriptionController::class, 'cancelSubscription']);
+    Route::post('paypal/success', [SubscriptionController::class, 'paypalSuccess'])->name('paypal.success');
+
 });
+
+
 
 // Watchlist Routes (Authentication Required)
 Route::middleware('auth:sanctum')->group(function () {
