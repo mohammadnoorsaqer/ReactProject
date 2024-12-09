@@ -10,7 +10,7 @@ const SubHeader = () => {
       />
       <div>
         <h4>Bundle with any Hulu plan & save</h4>
-        <h3>Get Hulu, Disney+, and ESPN+.</h3>
+        <h3>Get Movix, Disney+, and ESPN+.</h3>
       </div>
     </section>
   );

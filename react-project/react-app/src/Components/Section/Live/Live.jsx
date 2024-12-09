@@ -7,11 +7,11 @@ const Live = () => {
       {/* Live Section */}
       <section className="live">
         <div className="live-border">
-          <h4>Hulu + Live TV</h4>
+          <h4>Movix + Live TV</h4>
           <div className="text-xl">Live TV Makes It Better</div>
           <div className="sub-text">
             Make the switch from cable. Get 75+ top channels with your favorite
-            live sports, news, and events - plus the entire Hulu streaming
+            live sports, news, and events - plus the entire Movix streaming
             library.
           </div>
           <div className="legal-text">

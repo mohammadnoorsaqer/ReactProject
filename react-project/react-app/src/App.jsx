@@ -15,8 +15,6 @@ import UpdateProfilePicture from "./Components/profile/UpdateProfilePicture.jsx"
 import UserProfile from "./Components/profile/UserProfile.jsx"
 import Live from "./Components/Section/Live/Live.jsx";
 import SubHeader from "./Components/Section/SubHeader.jsx";
-import Chatbot from "./Components/ChatBot/ChatBot.jsx";
-
 
 // import "./App.css";
 
@@ -28,8 +26,8 @@ const Layout = () => {
          <MainSection/>
          <SubHeader/>
          <Live/>
-         <Chatbot/>
-        <Footer/>
+          
+                 <Footer/>
     </div>
   );
 };

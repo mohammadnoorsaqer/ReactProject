@@ -49,12 +49,16 @@ const Navbar = () => {
       </nav>
 
       <div className="navbar-header-content-pqr">
-        <img
-          src="https://github.com/bradtraversy/hulu-webpage-clone/blob/main/img/logo.png?raw=true"
-          alt="Hulu Logo"
-          className="navbar-logo-xyz"
-          loading="lazy"
-        />
+      <h1 style={{
+  background: 'linear-gradient(to right, #1CE783, #0EB770)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  fontWeight: 'bold',
+  fontSize: '3rem',
+  display: 'inline-block'
+}}>
+  Movix
+</h1>
         <h1 className="navbar-header-text-1-lmn">
           Watch thousands of TV shows and movies.
         </h1>
