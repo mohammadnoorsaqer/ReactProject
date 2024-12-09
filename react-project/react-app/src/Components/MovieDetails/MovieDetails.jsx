@@ -13,9 +13,11 @@ const MovieDetails = () => {
   const [error, setError] = useState(null);
   const [showTrailerPopup, setShowTrailerPopup] = useState(false);
   const [showPlayPopup, setShowPlayPopup] = useState(false);
+  const subscriptionType = localStorage.getItem('subscriptionType'); // "Basic" or "Premium"
+
+  // Check if the user has a valid subscription (Basic or Premium)
   const checkSubscription = () => {
-    const subscriptionType = localStorage.getItem('subscriptionType'); // Get the subscription type from localStorage
-    return subscriptionType === 'Basic'; // Return true if the user is subscribed to the Basic plan
+    return subscriptionType === 'Basic' || subscriptionType === 'Premium';
   };
   const addToWatchlist = (movieId, isPremium = false) => {
     const token = localStorage.getItem("token");
