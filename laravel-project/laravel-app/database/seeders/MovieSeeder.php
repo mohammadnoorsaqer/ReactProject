@@ -28,8 +28,11 @@ class MovieSeeder extends Seeder
                 'is_popular' => true,
                 'image_url' => '/images/thematrixx.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/vKQi3bBA1y8',
+                'movie_url' => 'https://vidsrc.net/embed/tt0133093/', // Second video URL
+
+
                 'genres' => [$action->id, $sciFi->id],
-            ],
+            ],  
             [
                 'title' => 'Inception',
                 'description' => 'A thief who steals corporate secrets through dream-sharing technology is tasked with planting an idea into the mind of a CEO.',
@@ -37,6 +40,8 @@ class MovieSeeder extends Seeder
                 'is_popular' => true,
                 'image_url' => '/images/the-inception.jfif', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/YoHD9XEInc0',
+                'movie_url' => 'https://vidsrc.net/embed/tt1375666/', // Second video URL
+
                 'genres' => [$action->id, $sciFi->id],
             ],
             [
@@ -46,6 +51,8 @@ class MovieSeeder extends Seeder
                 'is_popular' => true,
                 'image_url' => '/images/darknightt.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/EXeTwQWrcwY',
+                'movie_url' => 'https://vidsrc.net/embed/tt0468569/', // Second video URL
+
                 'genres' => [$action->id, $thriller->id],
             ],
             [
@@ -55,6 +62,8 @@ class MovieSeeder extends Seeder
                 'is_popular' => false,
                 'image_url' => '/images/maxresdefault.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/2LqzF5WauAw',
+                'movie_url' => 'https://vidsrc.net/embed/tt0816692/', // Second video URL
+
                 'genres' => [$sciFi->id, $drama->id],
             ],
             [
@@ -64,6 +73,8 @@ class MovieSeeder extends Seeder
                 'is_popular' => true,
                 'image_url' => '/images/extraction.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/Y274jZs5s7s',
+                'movie_url' => 'https://vidsrc.net/embed/tt12263384/', // Second video URL
+
                 'genres' => [$action->id],
             ],
             [
@@ -73,6 +84,8 @@ class MovieSeeder extends Seeder
                 'is_popular' => true,
                 'image_url' => '/images/lift.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/m2L-Sa_6MU0',
+                'movie_url' => 'https://vidsrc.net/embed/tt14371878/', // Second video URL
+
                 'genres' => [$action->id],
             ],
             [
@@ -82,6 +95,8 @@ class MovieSeeder extends Seeder
                 'is_popular' => true,
                 'image_url' => '/images/rednotice.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/T6l3mM7AWew',
+                'movie_url' => 'https://vidsrc.net/embed/tt7991608/', // Second video URL
+
                 'genres' => [$action->id],
             ],
             [
@@ -91,6 +106,8 @@ class MovieSeeder extends Seeder
                 'is_popular' => true,
                 'image_url' => '/images/1178893.jpg', // Corrected path
                 'video_url' => 'https://www.youtube.com/embed/YLE85olJjp8',
+                'movie_url' => 'https://vidsrc.net/embed/tt8106534/', // Second video URL
+
                 'genres' => [$action->id],
             ],
         ];
@@ -104,6 +121,7 @@ class MovieSeeder extends Seeder
                 'is_popular' => $movieData['is_popular'],
                 'image_url' => $movieData['image_url'],
                 'video_url' => $movieData['video_url'],
+                'movie_url' => $movieData['movie_url'],
             ]);
 
             $movie->genres()->attach($movieData['genres']);

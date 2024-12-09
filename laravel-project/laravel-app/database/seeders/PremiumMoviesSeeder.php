@@ -90,6 +90,8 @@ class PremiumMoviesSeeder extends Seeder
             'description' => 'A drama directed by Martin Scorsese about the Osage murders, set in 2024.',
             'image_url' => 'https://imageio.forbes.com/specials-images/imageserve/673913700f9ecf46de0fadd0/-Smile-2--partial-poster-/0x0.jpg?format=jpg&crop=2028,1140,x50,y0,safe&width=960',
             'video_url' => 'https://www.youtube.com/watch?v=0HY6QFlBzUY',
+            'movie_url'=>   'https://vidsrc.xyz/embed/movie/tt29268110'
+            ,
       
             'release_date' => '2024-09-10',  // Release date added
         ]);
